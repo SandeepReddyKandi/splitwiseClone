@@ -2,7 +2,7 @@ const _ = require('underscore');
 const config = require('../config/config');
 const authenticationUtil = require('../utils/authentication');
 const genericDtl = require('../dtl/generic');
-const userRepo = require('../repos/user_repo');
+const userRepo = require('../repos-old/user_repo');
 const logger = require('../utils/logger').getLogger();
 
 async function isLoggedIn(req, res, next) {

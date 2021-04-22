@@ -2,15 +2,15 @@ const logger = require('../utils/logger').getLogger();
 const _ = require('underscore');
 const genericDTL = require('../dtl/generic');
 const groupsDtl = require('../dtl/groups_dtl');
-const groupsRepo = require('../repos/groups_repo');
-const expensesRepo = require('../repos/expenses_repo');
+const GroupService = require('../services/GroupService');
+const ExpenseService = require('../services/ExpenseService');
 
 async function getGroupInfo(req, res, next) {
   try {
     logger.info('controllers', 'getGroupInfo');
     const { userId } = req.user;
     const { groupId } = req.params;
-    const group = await groupsRepo.getGroupById(groupId);
+    const group = await GroupService.getGroupById(groupId);
     const response = genericDTL.getResponseDto(group);
     return res.send(response);
   } catch (err) {
@@ -23,7 +23,7 @@ async function getAllGroups(req, res, next) {
   try {
     logger.info('controllers', 'getAllGroups');
     const { userId } = req.user;
-    const groups = await groupsRepo.getAllGroupsByUserId(userId);
+    const groups = await GroupService.getAllGroupsByUserId(userId);
     const data = groupsDtl.getAllGroupsDto(groups);
     const response = genericDTL.getResponseDto(data);
     return res.send(response);
@@ -38,8 +38,8 @@ async function acceptGroupInvite(req, res, next) {
     logger.info('controllers', 'acceptGroupInvite');
     const { userId } = req.user;
     const { groupId } = req.params;
-    await groupsRepo.acceptGroupInvite({ groupId, userId });
-    const updatedDetails = await groupsRepo.getGroupById(groupId);
+    await GroupService.acceptGroupInvite({ groupId, userId });
+    const updatedDetails = await GroupService.getGroupById(groupId);
     const data = groupsDtl.getBasicGroupDetails(updatedDetails);
     const response = genericDTL.getResponseDto(data);
     return res.send(response);
@@ -55,9 +55,9 @@ async function createGroup(req, res, next) {
     const { userId } = req.user;
     const data = req.body;
     const { name, invitedUsers, currency } = data;
-    const group = await groupsRepo.findGroupByName(name);
+    const group = await GroupService.findGroupByName(name);
     if (group && !_.isEmpty(group)) return res.send(genericDTL.getResponseDto('', 'Group with this name already exists'));
-    const newGroup = await groupsRepo.createGroup({ userId, name, currency, invitedUsers });
+    const newGroup = await GroupService.createGroup({ userId, name, currency, invitedUsers });
     const resData = groupsDtl.getBasicGroupDetails(newGroup);
     const response = genericDTL.getResponseDto(resData);
     return res.send(response);
@@ -72,10 +72,10 @@ async function leaveGroup(req, res, next) {
     logger.info('controllers', 'leaveGroup');
     const { userId } = req.user;
     const { groupId } = req.params;
-    const groupExpense = await expensesRepo.getGroupExpenseForUserId(groupId, userId);
+    const groupExpense = await ExpenseService.getGroupExpenseForUserId(groupId, userId);
     if (groupExpense && !_.isEmpty(groupExpense)) return res.send(genericDTL.getResponseDto('', 'You can not leave group without clearing dues.'));
-    await groupsRepo.leaveGroup(userId, groupId);
-    const updatedDetails = await groupsRepo.getGroupById(groupId);
+    await GroupService.leaveGroup(userId, groupId);
+    const updatedDetails = await GroupService.getGroupById(groupId);
     const data = groupsDtl.getBasicGroupDetails(updatedDetails);
     const response = genericDTL.getResponseDto(data);
     return res.send(response);
@@ -89,8 +89,8 @@ async function updateGroup(req, res, next) {
   try {
     logger.info('controllers', 'updateGroup', 'body', JSON.stringify(req.body));
     const { name, groupId } = req.body;
-    await groupsRepo.updateGroupDetails({ groupId, name });
-    const updatedDetails = await groupsRepo.getGroupById(groupId);
+    await GroupService.updateGroupDetails({ groupId, name });
+    const updatedDetails = await GroupService.getGroupById(groupId);
     const data = groupsDtl.getBasicGroupDetails(updatedDetails);
     const response = genericDTL.getResponseDto(data);
     return res.send(response);
