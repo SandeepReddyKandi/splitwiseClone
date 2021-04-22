@@ -97,7 +97,7 @@ const mapDispatchToProps = (dispatch) =>{
 	return {
 		addUserData: (payload)=>{
 			dispatch({
-				type: "ADD_USER",
+				type: "ADD_USER_DATA",
 				payload
 			});
 		}

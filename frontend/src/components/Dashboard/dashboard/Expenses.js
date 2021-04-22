@@ -58,19 +58,19 @@ const Expenses = (props)=>{
                     <tr>
                         <td>
                             <div className="user-exp user-total">
-                                <p className="grey-text lighten-2">total balance</p>
+                                <p className="grey-text lighten-2">Total balance</p>
                                 <span className="green-text">{allBalance !== undefined ? allBalance.totalcost : ''}</span>
                             </div>
                         </td>
                         <td>
                             <div className="user-exp user-total">
-                                <p className="grey-text lighten-2">you owe</p>
+                                <p className="grey-text lighten-2">You owe</p>
                                 <span className="green-text">{ allBalance !== undefined ? allBalance.recieve : ''}</span>
                             </div>
                         </td>
                         <td>
                             <div className="user-exp user-total">
-                                <p className="grey-text lighten-2">you are owed</p>
+                                <p className="grey-text lighten-2">You are owed</p>
                                 <span className="green-text">{ allBalance !== undefined ? allBalance.pay : ''}</span>
                             </div>
                         </td>
@@ -80,51 +80,35 @@ const Expenses = (props)=>{
             <div className="col m12">
                 <div className="row valign-wrappe center-align amtList">
                     <div className="col m6 payingList">
-                        <h5 className="grey-text left">YOU OWE</h5>
+                        <h5 className="grey-text left">YOU ARE OWED</h5>
                         {
-                            allBalance !== undefined ?
-                                (
-                                    allBalance.recieveExpenses.length > 0?
-                                        (
-                                            allBalance.recieveExpenses.map((payment)=>{
-                                                return(
-                                                    <Give paymentList={payment} key={payment.id}/>
-                                                )
-                                            })
-                                        )
-                                        :
-                                        (
-                                            <div className="container emptyList row valign-wrapper center-align">
-                                                <h5 className="col s12 m12 grey-text emptyText">List is empty</h5>
-                                            </div>
-                                        )
-                                ):(
-                                    ''
-                                )
+
+                            allBalance && allBalance.recieveExpenses.length > 0 ? (
+                                allBalance.recieveExpenses.map((payment)=>{
+                                    return(
+                                        <Give paymentList={payment} key={payment.id}/>
+                                    )
+                                })
+                            ) : (
+                                <div className="container emptyList row valign-wrapper center-align">
+                                    <h5 className="col s12 m12 grey-text emptyText">List is empty</h5>
+                                </div>
+                            )
                         }
                     </div>
                     <div className="col m6 recievingList">
-                        <h5 className="grey-text right">YOU ARE OWED</h5>
+                        <h5 className="grey-text right">YOU OWE</h5>
                         {
-                            allBalance !== undefined ?
-                                (
-                                    allBalance.getExpenses.length ?
-                                        (
-                                            allBalance.getExpenses.map((payment)=>{
-                                                return(
-                                                    <Recieve paymentList={payment} key={payment.id}/>
-                                                )
-                                            })
-                                        )
-                                        :
-                                        (
-                                            <div className="container emptyList row valign-wrapper center-align">
-                                                <h5 className="col s12 m12 grey-text emptyText">List is empty</h5>
-                                            </div>
-                                        )
-                                ):(
-                                    ''
-                                )
+                            allBalance && allBalance.getExpenses.length
+                                ? allBalance.getExpenses.map((payment)=>{
+                                    return(
+                                        <Recieve paymentList={payment} key={payment.id}/>
+                                    )
+                                }) : (
+                                <div className="container emptyList row valign-wrapper center-align">
+                                  <h5 className="col s12 m12 grey-text emptyText">List is empty</h5>
+                                </div>
+                            )
                         }
                     </div>
                 </div>

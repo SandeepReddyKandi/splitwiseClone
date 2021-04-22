@@ -5,9 +5,7 @@ import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import axios from "axios";
 import {toast} from "react-toastify";
-import Utils from "../utils";
 import NavigationBarComponent from "./NavigationBarComponent";
-import UserBackendAPIService from "../services/UserBackendAPIService";
 
 const API_ENDPOINT = process.env.REACT_APP_ENDPOINT;
 
@@ -20,16 +18,10 @@ class SignUpComponent extends Component {
     signupStatus: ""
   }
 
-  getRedirections = async () => {
-    const { data, success } = await UserBackendAPIService.getUserDetails();
-    if (success) {
-      this.props.addUserData(data)
+  componentDidMount() {
+    if (this.props.user && this.props.user.name) {
       this.props.history.push('/user/home');
     }
-  }
-
-  componentDidMount() {
-    this.getRedirections();
   }
 
   signUpUser = (e) => {
@@ -100,7 +92,7 @@ class SignUpComponent extends Component {
                             <label htmlFor="phone">Phone Number</label>
                           </div>
                         </div>
-                        <button className="waves-effect waves-light btn-large orange darken-4 submitBtn" onClick={this.signUpUser}>
+                        <button className="btn-large orange darken-4 submitBtn" onClick={this.signUpUser}>
                           Sign me up!
                         </button>
                       </form>
@@ -114,15 +106,10 @@ class SignUpComponent extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) =>{
+const mapStateToProps = (state) => {
   return {
-    addUserData: (state) => {
-      dispatch({
-        type: "ADD_USER",
-        payload: state
-      });
-    }
-  };
-};
+    user: state.userState.user
+  }
+}
 
-export default withRouter(connect(null, mapDispatchToProps)(SignUpComponent));
+export default withRouter(connect(mapStateToProps)(SignUpComponent));

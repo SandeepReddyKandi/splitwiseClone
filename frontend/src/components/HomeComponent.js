@@ -1,10 +1,27 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "./home.css";
 import airplane from "../airplane.png";
-import {Link, NavLink} from "react-router-dom";
+import {Link, NavLink, useHistory} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {toast} from "react-toastify";
 
-const home = () => {
-  return(
+const HomeComponent = () => {
+  const history = useHistory();
+
+  const {user} = useSelector(state => {
+    return {
+      user: state.userState.user,
+    }
+  });
+
+  useEffect(() => {
+    if (user && user.name) {
+      history.push('/user/home');
+      toast.success(`Already Signed As ${user.name}`);
+    }
+  })
+
+  return (
     <div className="homePage">
       <nav className="nav-wrapper white navbar">
         <div className="container">
@@ -12,12 +29,16 @@ const home = () => {
             <img className="responsive-img" src="https://img.icons8.com/fluent/48/000000/love-letter.png" alt="letter" style={{ marginTop: "10px" }}/>
           </Link>
           <ul className="right">
-            <li><Link to="/login" className="green-text text-darken-3">
-                            Login
-            </Link></li>
-            <li><NavLink to="/signup" className="black-text">
-              <button className="waves-effect waves-light btn">Sign up</button>
-            </NavLink></li>
+            <li>
+              <Link to="/login" className="green-text text-darken-3">
+                Login
+              </Link>
+            </li>
+            <li>
+              <NavLink to="/signup" className="black-text">
+                <button className="waves-effect waves-light btn">Sign up</button>
+              </NavLink>
+            </li>
           </ul>
         </div>
       </nav>
@@ -69,4 +90,4 @@ const home = () => {
     </div>
   );
 };
-export default home;
+export default HomeComponent;

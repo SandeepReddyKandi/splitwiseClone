@@ -46,7 +46,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         addUserData : (state) => {
             dispatch({
-                type : 'ADD_USER',
+                type : 'ADD_USER_DATA',
                 payload : state
             })
         }

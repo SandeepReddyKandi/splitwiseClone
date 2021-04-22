@@ -16,7 +16,7 @@ const initState = {
 
 const userReducer = (state = initState, action)=> {
   switch (action.type) {
-    case 'ADD_USER' : {
+    case 'ADD_USER_DATA' : {
       return {
         ...state,
         user: {
