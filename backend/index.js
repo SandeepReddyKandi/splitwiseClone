@@ -1,11 +1,12 @@
+import * as mongoose from 'mongoose';
+
 const express = require('express');
 const bodyParser = require('body-parser');
-const config = require('./config/config');
+const { DB_URL, DEFAULT_PORT } = require('./config/config');
 const cors = require('cors');
 
 const app = express();
 const logger = require('./utils/logger').getLogger();
-const db = require('./models/index');
 
 app.use(cors());
 app.use((req, res, next) => {
@@ -18,10 +19,14 @@ app.use((req, res, next) => {
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // to support URL-encoded bodies
 
-db.sequelize.sync();
+mongoose.connect(DB_URL, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+});
 
-// Overwrite data
-// db.sequelize.sync({ force: true });
+mongoose.connection.once('open', () => {
+  logger.log('MongoDb is connected');
+});
 
 app.use('/user/', require('./routes/user_router'));
 app.use('/groups/', require('./routes/groups_router'));
@@ -29,7 +34,7 @@ app.use('/expenses/', require('./routes/expense_router'));
 
 app.use('/static/public', express.static(`${__dirname}/public`));
 // set port, listen for requests
-const PORT = process.env.PORT || config.port;
+const PORT = process.env.PORT || DEFAULT_PORT;
 app.listen(PORT, () => {
   logger.info(`Server is running on port ${PORT}.`);
 });
