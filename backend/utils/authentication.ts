@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 
 function generateToken(secretKey, tokenPayload) {
   if (!secretKey || !tokenPayload) throw new Error('secretKey and tokenPayload required');

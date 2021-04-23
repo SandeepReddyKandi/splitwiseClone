@@ -76,7 +76,7 @@ class GroupBackendAPIService {
 
     static async leaveGroup(invite) {
         if (!invite.id) {
-            toast.error('Please select a group to accept invitation!');
+            toast.error('Please select a group to leave!');
         }
         const url = `${API_ENDPOINT}/leave/${invite.id}`;
         try {

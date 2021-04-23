@@ -64,13 +64,13 @@ const Expenses = (props)=>{
                         </td>
                         <td>
                             <div className="user-exp user-total">
-                                <p className="grey-text lighten-2">You owe</p>
+                                <p className="grey-text lighten-2">You are owed</p>
                                 <span className="green-text">{ allBalance !== undefined ? allBalance.recieve : ''}</span>
                             </div>
                         </td>
                         <td>
                             <div className="user-exp user-total">
-                                <p className="grey-text lighten-2">You are owed</p>
+                                <p className="grey-text lighten-2">You owe</p>
                                 <span className="green-text">{ allBalance !== undefined ? allBalance.pay : ''}</span>
                             </div>
                         </td>

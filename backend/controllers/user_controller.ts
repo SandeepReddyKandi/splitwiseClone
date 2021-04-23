@@ -1,5 +1,5 @@
-import _ from 'underscore';
-import bcrypt from 'bcrypt';
+import * as _ from 'underscore';
+import * as bcrypt from 'bcrypt';
 import getLogger from '../utils/logger';
 import genericDTL from '../dtl/generic';
 import config from '../config/config';

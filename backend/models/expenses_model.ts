@@ -18,8 +18,8 @@ const expenseSchema: Schema = new Schema({
   groupId: { type: String, required: true},
   amount: { type: Number, required: true},
   description: { type: String, required: true},
-  settledAt: { type: Schema.Types.Mixed, required: true},
-  currency: { type: String, required: true},
+  settledAt: { type: Schema.Types.Mixed},
+  currency: { type: String },
 }, { timestamps: true });
 
 export default mongoose.model<IExpense>("Expense", expenseSchema);

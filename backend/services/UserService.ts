@@ -9,7 +9,7 @@ class UserService {
     }
 
     static async getUserById(userId) {
-        const user = await User.findOne({ id: userId });
+        const user = await User.findById( userId );
         return user;
     }
 
@@ -22,9 +22,9 @@ class UserService {
     static async updateUserDetailsById(userId, data) {
         const { currency, phone, name, password, language, timezone, imageURL } = data;
         const values = { currency, phone, name, password, language, timezone, imageURL };
-        const condition = { id: userId };
-        await User.updateMany(condition, values);
-        const user = await User.findOne({ id: userId });
+        const condition = { _id: userId };
+        await User.updateOne(condition, values);
+        const user = await User.findOne({ _id: userId });
         return user;
     }
 
@@ -34,16 +34,15 @@ class UserService {
     }
 
     static async unsetUserAppAccessToken(userId) {
-        const condition = { id: userId };
-        const user = await User.updateMany(condition, { token: '' });
+        const condition = { _id: userId };
+        const user = await User.updateOne(condition, { token: '' });
         return user;
     }
 
     static async addUserAppAccessToken(userId, token) {
-        const values = { token };
-        // const condition = { returning: true, plain: true, where: { id: userId } };
-        const condition = { id: userId };
-        const user = await User.updateMany(condition, { token });
+        const condition = { _id: userId };
+        const user = await User.updateOne(condition, {token});
+        // user.token = token;
         return user;
     }
 

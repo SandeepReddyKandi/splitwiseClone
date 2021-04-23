@@ -29,7 +29,9 @@ class ExpenseService {
         const result = await Expense.updateMany({
             $or : condition
         }, values);
-        return result;
+        return await Expense.find({
+            $or : condition
+        });
     }
     static async getAllExpensesByGroupId(groupId, userId) {
         // TODO

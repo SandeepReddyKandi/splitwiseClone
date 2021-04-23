@@ -5,7 +5,9 @@ export interface IGroup extends Document {
     id: string,
     name: string,
     acceptedUsers: string[],
-    invitedUsers: string[]
+    invitedUsers: string[],
+    currency: string,
+    imageUrl: string,
 }
 //     acceptedUsers: {
 //      type: DataTypes.STRING,
@@ -19,8 +21,10 @@ export interface IGroup extends Document {
 
 const groupSchema: Schema = new Schema({
     name: { type: String, required: true},
-    acceptedUsers: { type: String, required: false},
-    invitedUsers: { type: Number, required: false},
+    acceptedUsers: { type: [String], required: false},
+    invitedUsers: { type: [String], required: false},
+    currency: { type: String},
+    imageUrl: {type: String}
 }, { timestamps: true });
 
 export default mongoose.model<IGroup>("Group", groupSchema);

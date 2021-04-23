@@ -118,11 +118,11 @@ class ExpenseBackendAPIService {
 
     static async settleExpenseWithUser2ID(payload) {
         if (!payload.userId || !payload.user2Id) {
-            toast.error('Please select a group to accept invitation!');
+            toast.error('something went wrong while settling the expense!');
         }
 
         console.log('payload : ', payload);
-        const url = `${API_ENDPOINT}/settle/${payload.params}`;
+        const url = `${API_ENDPOINT}/settle/${payload.user2Id}`;
         try {
             const response = await axios.put(url, {
                 ...payload

@@ -79,8 +79,8 @@ class Modal extends Component {
     addAPersonToGroup = () => {
         // console.log('selected person : ',this.state.selectedPerson.id, '  _user : ', this.state.userId);
         ExpenseBackendAPIService.settleExpenseWithUser2ID({
-            user : this.state.userId,
-            params : this.state.selectedPerson.id
+            userId : this.state.userId,
+            user2Id : this.state.selectedPerson.id
         }).then(({data, success})=>{
             if(success){
                 console.log('settled expense : ',data);
@@ -164,6 +164,7 @@ const mapDispatchToProps = (dispatch)=>{
 }
 
 const mapStateToProps = (state)=>{
+    console.log( state.userState.user)
     return {
         userInfo : state.userState.user,
     }

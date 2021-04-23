@@ -72,7 +72,6 @@ async function createGroupExpense(req, res, next) {
     const group = await GroupService.getGroupById(groupId);
     if (!group || !group.acceptedUsers.length) return res.send(genericDTL.getResponseDto('', 'Group not found'));
     const userIds = group.acceptedUsers;
-    // @ts-ignore
     const { currency } = group;
     const expenses = await ExpenseService.createGroupExpense({ userId, userIds, groupId, amount, description, currency });
     const resData = expensesDtl.getBasicExpensesDetailsDto(expenses);

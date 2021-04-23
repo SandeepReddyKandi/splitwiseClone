@@ -21,6 +21,7 @@ const userReducer = (state = initState, action)=> {
         ...state,
         user: {
           ...action.payload,
+          id: action.payload._id,
         }
       }
     }

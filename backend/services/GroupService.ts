@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import Group from '../models/groups_model';
+import Expense from '../models/expenses_model';
 
 class GroupService {
     static async findGroupByName(name) {
@@ -22,19 +23,19 @@ class GroupService {
     }
 
     static async getGroupById(groupId) {
-        const result = await Group.findOne({id: groupId});
+        const result = await Group.findOne({_id: groupId});
         return result;
     }
 
     static async acceptGroupInvite(data) {
         const {groupId, userId} = data;
-        const groupData = await Group.findOne( {id: groupId});
+        const groupData = await Group.findOne( {_id: groupId});
         if (!groupData) throw new Error('Invalid group id');
         if (groupData.acceptedUsers.includes(userId)) return groupData;
         const newInvitedUsers = _.filter(groupData.invitedUsers, user => user !== userId);
         const newAcceptedUsers = [...groupData.acceptedUsers, userId];
         const values = {acceptedUsers: newAcceptedUsers, invitedUsers: newInvitedUsers};
-        const condition = {id: groupId};
+        const condition = {_id: groupId};
         const result = await Group.updateMany(condition, values);
         return result;
     }
@@ -48,31 +49,36 @@ class GroupService {
     }
 
     static async leaveGroup(userId, groupId) {
-        const groupData = await Group.findOne({where: {id: groupId}});
+        const groupData = await Group.findOne({_id: groupId});
         if (!groupData) throw new Error('Invalid group id');
         const newAcceptedUsers = _.filter(groupData.acceptedUsers, user => user !== userId);
         const values = {acceptedUsers: newAcceptedUsers};
         if (newAcceptedUsers.length === 0 && groupData.invitedUsers.length === 0) {
-            const result = await Group.deleteMany({id: groupId});
+            const result = await Group.deleteMany({_id: groupId});
             return result;
         }
-        const condition = {id: groupId};
-        const result = await Group.updateMany(condition, values);
+        const condition = {_id: groupId};
+        const result = await Group.updateOne(condition, values);
         return result;
     }
 
     static async updateGroupDetails(data) {
         const {groupId, name} = data;
         const values = {name};
-        const condition = {id: groupId};
-        const result = await Group.updateMany(condition, values);
+        const condition = {_id: groupId};
+        const result = await Group.updateOne(condition, values);
         return result;
     }
 
     static async getAllAcceptedUsersByGroupId(groupId) {
-        const group = await Group.findOne({id: groupId});
+        const group = await Group.findOne({_id: groupId});
         const result = group.acceptedUsers;
         return result;
+    }
+
+    static async getGroupExpenseForUserId(groupId, userId) {
+        const condition = { $or: [{ byUser: userId, groupId, settledAt: null }, { toUser: userId, groupId, settledAt: null }] };
+        return Expense.find(condition);
     }
 }
 
