@@ -1,4 +1,4 @@
-const _ = require('underscore');
+import * as _ from 'underscore';
 
 function getAllGroupsDto(data) {
   const { invitedGroups, acceptedGroups } = data;

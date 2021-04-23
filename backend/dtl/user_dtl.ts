@@ -1,4 +1,4 @@
-const _ = require('underscore');
+import * as _ from 'underscore';
 
 function getBasicUsersDetailDto(users) {
   const data = _.map(users, (user) => {

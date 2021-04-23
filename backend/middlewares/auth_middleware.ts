@@ -1,18 +1,17 @@
-const _ = require('underscore');
-const config = require('../config/config');
-const authenticationUtil = require('../utils/authentication');
-const genericDtl = require('../dtl/generic');
-const userRepo = require('../repos-old/user_repo');
-const logger = require('../utils/logger').getLogger();
+import * as _ from 'underscore';
+import config from '../config/config.js';
+import authenticationUtil from '../utils/authentication';
+import genericDtl from '../dtl/generic';
+import getLogger from '../utils/logger';
 
 async function isLoggedIn(req, res, next) {
   try {
     let tokenData;
     const bearerToken = req.headers.authorization;
-    logger.debug('isLoggedIn User Check called with bearerToken', bearerToken);
+    getLogger().debug('isLoggedIn User Check called with bearerToken', bearerToken);
 
     if (!bearerToken || !bearerToken.length) {
-      logger.error('isLoggedIn User Check did not get authorization header', req.headers.authorization);
+      getLogger().error('isLoggedIn User Check did not get authorization header', req.headers.authorization);
       const response = genericDtl.getResponseDto({}, 'Unauthorized User!');
       return res.status(401).send(response);
     }
@@ -20,7 +19,7 @@ async function isLoggedIn(req, res, next) {
     try {
       tokenData = await authenticationUtil.verifyJwtToken(config.APP_TOKEN_SECRET, bearerToken);
     } catch (err) {
-      logger.error(`Error while trying to verify token. Err: ${err}`);
+      getLogger().error(`Error while trying to verify token. Err: ${err}`);
 
       const appAccessToken = bearerToken.split(' ')[1];
       const user = await userRepo.getUserByAppAccessToken(appAccessToken);
@@ -42,7 +41,7 @@ async function isLoggedIn(req, res, next) {
     req.user = { userId: decodedUser.id, email: decodedUser.email };
     return next();
   } catch (err) {
-    logger.error(`Error while verifing user auth. Err: ${err}`);
+    getLogger().error(`Error while verifing user auth. Err: ${err}`);
     return next(err);
   }
 }

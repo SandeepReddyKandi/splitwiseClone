@@ -1,5 +1,5 @@
-const _ = require('underscore');
-import Group from "../models/groups_model";
+import _ from 'underscore';
+import Group from '../models/groups_model';
 
 class GroupService {
     static async findGroupByName(name) {

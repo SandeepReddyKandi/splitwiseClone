@@ -1,10 +1,9 @@
-const logger = require('../utils/logger').getLogger();
-const _ = require('underscore');
-const genericDTL = require('../dtl/generic');
-const GroupService = require('../services/GroupService');
-const UserService = require('../services/UserService');
-const ExpenseService = require('../services/ExpenseService');
-const expensesDtl = require('../dtl/expenses_dtl');
+import getLogger from '../utils/logger';
+import genericDTL from '../dtl/generic';
+import GroupService from '../services/GroupService.ts';
+import UserService from '../services/UserService.ts';
+import ExpenseService from '../services/ExpenseService.ts';
+import expensesDtl from '../dtl/expenses_dtl';
 
 function getNameById(data, id) {
   const value = data.find(entry => entry.id == id);
@@ -13,7 +12,7 @@ function getNameById(data, id) {
 
 async function getBalanceByUser2Id(req, res, next) {
   try {
-    logger.info('controllers', 'getBalanceByUser2Id');
+    getLogger().info('controllers', 'getBalanceByUser2Id');
     const { userId } = req.user;
     const { user2Id } = req.params;
     const user = await UserService.getUserById(user2Id);
@@ -22,14 +21,14 @@ async function getBalanceByUser2Id(req, res, next) {
     const response = genericDTL.getResponseDto({ balance });
     return res.send(response);
   } catch (err) {
-    logger.error(`Unable to get balance between users. Err. ${JSON.stringify(err)}`);
+    getLogger().error(`Unable to get balance between users. Err. ${JSON.stringify(err)}`);
     return next(err);
   }
 }
 
 async function getAllExpenses(req, res, next) {
   try {
-    logger.info('controllers', 'getAllExpenses');
+    getLogger().info('controllers', 'getAllExpenses');
     const { userId } = req.user;
     const { getExpenses, payExpenses } = await ExpenseService.getAllExpensesForUserId(userId);
     const users = await UserService.getAllUsers();
@@ -38,14 +37,14 @@ async function getAllExpenses(req, res, next) {
     const response = genericDTL.getResponseDto(data);
     return res.send(response);
   } catch (err) {
-    logger.error(`Unable to get all expenses. Err. ${JSON.stringify(err)}`);
+    getLogger().error(`Unable to get all expenses. Err. ${JSON.stringify(err)}`);
     return next(err);
   }
 }
 
 async function getRecentExpenses(req, res, next) {
   try {
-    logger.info('controllers', 'getRecentExpenses');
+    getLogger().info('controllers', 'getRecentExpenses');
     const { userId } = req.user;
     const { acceptedGroups } = await GroupService.getAllGroupsByUserId(userId);
     const groups = await GroupService.getAllGroups();
@@ -60,14 +59,14 @@ async function getRecentExpenses(req, res, next) {
     const response = genericDTL.getResponseDto(data);
     return res.send(response);
   } catch (err) {
-    logger.error(`Unable to get recent expenses. Err. ${JSON.stringify(err)}`);
+    getLogger().error(`Unable to get recent expenses. Err. ${JSON.stringify(err)}`);
     return next(err);
   }
 }
 
 async function createGroupExpense(req, res, next) {
   try {
-    logger.info('controllers', 'createGroupExpense', 'body', JSON.stringify(req.body));
+    getLogger().info('controllers', 'createGroupExpense', 'body', JSON.stringify(req.body));
     const { userId } = req.user;
     const { groupId, amount, description } = req.body;
     const group = await GroupService.getGroupById(groupId);
@@ -79,27 +78,27 @@ async function createGroupExpense(req, res, next) {
     const response = genericDTL.getResponseDto(resData);
     return res.send(response);
   } catch (err) {
-    logger.error(`Unable to create expense. Err. ${JSON.stringify(err)}`);
+    getLogger().error(`Unable to create expense. Err. ${JSON.stringify(err)}`);
     return next(err);
   }
 }
 
 async function getAllExpensesForGroup(req, res, next) {
   try {
-    logger.info('controllers', 'getAllExpensesForGroup', 'params', JSON.stringify(req.params));
+    getLogger().info('controllers', 'getAllExpensesForGroup', 'params', JSON.stringify(req.params));
     const { groupId } = req.params;
     const expenses = await ExpenseService.getAllExpensesForGroup(groupId);
     const response = genericDTL.getResponseDto(expenses);
     return res.send(response);
   } catch (err) {
-    logger.error(`Unable to settle expense. Err. ${JSON.stringify(err)}`);
+    getLogger().error(`Unable to settle expense. Err. ${JSON.stringify(err)}`);
     return next(err);
   }
 }
 
 async function getBalanceBetweenAllUsersForGroup(req, res, next) {
   try {
-    logger.info('controllers', 'getBalanceBetweenAllUsersForGroup', 'params', JSON.stringify(req.params));
+    getLogger().info('controllers', 'getBalanceBetweenAllUsersForGroup', 'params', JSON.stringify(req.params));
     const { groupId } = req.params;
     const users = await GroupService.getAllAcceptedUsersByGroupId(groupId);
     const balances = [];
@@ -117,7 +116,7 @@ async function getBalanceBetweenAllUsersForGroup(req, res, next) {
     const response = genericDTL.getResponseDto(balances);
     return res.send(response);
   } catch (err) {
-    logger.error(`Unable to settle expense. Err. ${JSON.stringify(err)}`);
+    getLogger().error(`Unable to settle expense. Err. ${JSON.stringify(err)}`);
     return next(err);
   }
 }
@@ -125,14 +124,14 @@ async function getBalanceBetweenAllUsersForGroup(req, res, next) {
 
 async function settleExpense(req, res, next) {
   try {
-    logger.info('controllers', 'settleExpense', 'params', JSON.stringify(req.params));
+    getLogger().info('controllers', 'settleExpense', 'params', JSON.stringify(req.params));
     const { userId } = req.user;
     const { user2Id } = req.params;
     const updatedDetails = await ExpenseService.settleAllBalancesBetweenUsers(userId, user2Id);
     const response = genericDTL.getResponseDto(updatedDetails);
     return res.send(response);
   } catch (err) {
-    logger.error(`Unable to settle expense. Err. ${JSON.stringify(err)}`);
+    getLogger().error(`Unable to settle expense. Err. ${JSON.stringify(err)}`);
     return next(err);
   }
 }

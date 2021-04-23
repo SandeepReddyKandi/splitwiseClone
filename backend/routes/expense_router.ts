@@ -1,6 +1,6 @@
-const express = require('express');
-const expenseController = require('../controllers/expense_controller');
-const { isLoggedIn } = require('../middlewares/auth_middleware');
+import express from 'express';
+import expenseController from '../controllers/expense_controller.ts';
+import { isLoggedIn } from '../middlewares/auth_middleware.ts';
 
 const router = express.Router();
 
@@ -12,4 +12,4 @@ router.put('/settle/:user2Id', isLoggedIn, expenseController.settleExpense);
 router.get('/all-group/:groupId', isLoggedIn, expenseController.getAllExpensesForGroup);
 router.get('/balance-group/:groupId', isLoggedIn, expenseController.getBalanceBetweenAllUsersForGroup);
 
-module.exports = router;
+export default router;

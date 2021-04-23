@@ -1,6 +1,5 @@
-import Expense from "../models/expenses_model";
-
-const _ = require('underscore');
+import Expense '../models/expenses_model';
+import * as _ 'underscore';
 
 class ExpenseService {
     static getTotalAmount(allExpenses) {
@@ -65,4 +64,6 @@ class ExpenseService {
     }
 }
 
-export default ExpenseService;
+module.exports = {
+    ExpenseService
+}

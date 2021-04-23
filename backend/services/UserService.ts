@@ -1,6 +1,4 @@
-const db = require('../models/index');
 import User from "../models/user_model";
-
 
 class UserService {
     static async createNewUser(data) {

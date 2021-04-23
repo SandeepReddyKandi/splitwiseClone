@@ -1,4 +1,4 @@
-const log4js = require('log4js');
+import log4js from 'log4js';
 
 function getConfigObject() {
   return {
@@ -20,6 +20,4 @@ function getLogger() {
   return loggerObject;
 }
 
-module.exports = {
-  getLogger,
-};
+export default getLogger;

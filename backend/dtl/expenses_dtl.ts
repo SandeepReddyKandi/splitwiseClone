@@ -1,5 +1,5 @@
-const _ = require('underscore');
-const { expenseEnums } = require('../utils/enums');
+import * as _ from 'underscore';
+import { expenseEnums } from '../utils/enums';
 
 function getNameById(data, id) {
   const value = data.find(entry => entry.id == id);

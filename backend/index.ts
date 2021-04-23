@@ -1,12 +1,14 @@
-import * as mongoose from 'mongoose';
-
-const express = require('express');
-const bodyParser = require('body-parser');
-const { DB_URL, DEFAULT_PORT } = require('./config/config');
-const cors = require('cors');
+import express from 'express';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import { DB_URL, DEFAULT_PORT } from './config/config';
+import getLogger from './utils/logger';
+import userRouter from './routes/user_router';
+import groupRouter from './routes/groups_router';
+import expenseRouter from './routes/expense_router';
 
 const app = express();
-const logger = require('./utils/logger').getLogger();
 
 app.use(cors());
 app.use((req, res, next) => {
@@ -25,17 +27,17 @@ mongoose.connect(DB_URL, {
 });
 
 mongoose.connection.once('open', () => {
-  logger.log('MongoDb is connected');
+  getLogger().log('MongoDb is connected');
 });
 
-app.use('/user/', require('./routes/user_router'));
-app.use('/groups/', require('./routes/groups_router'));
-app.use('/expenses/', require('./routes/expense_router'));
+app.use('/user/', userRouter);
+app.use('/groups/', groupRouter);
+app.use('/expenses/', expenseRouter);
 
 app.use('/static/public', express.static(`${__dirname}/public`));
 // set port, listen for requests
 const PORT = process.env.PORT || DEFAULT_PORT;
 app.listen(PORT, () => {
-  logger.info(`Server is running on port ${PORT}.`);
+  getLogger().info(`Server is running on port ${PORT}.`);
 });
 

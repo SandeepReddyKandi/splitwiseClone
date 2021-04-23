@@ -1,8 +1,8 @@
-const express = require('express');
-const multer = require('multer');
-const path = require('path');
-const userController = require('../controllers/user_controller');
-const { isLoggedIn } = require('../middlewares/auth_middleware');
+import express from 'express';
+import multer from 'multer';
+import path from 'path';
+import userController from '../controllers/user_controller';
+import { isLoggedIn } from '../middlewares/auth_middleware';
 
 const router = express.Router();
 
@@ -22,4 +22,4 @@ router.put('/update', isLoggedIn, upload, userController.updateUserDetails);
 router.get('/all', isLoggedIn, userController.getAllUsers);
 router.post('/me', isLoggedIn, userController.getUserDetails);
 
-module.exports = router;
+export default router;

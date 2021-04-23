@@ -1,6 +1,6 @@
-const express = require('express');
-const groupsController = require('../controllers/group_controller');
-const { isLoggedIn } = require('../middlewares/auth_middleware');
+import express from 'express';
+import groupsController from '../controllers/group_controller.ts';
+import { isLoggedIn } from '../middlewares/auth_middleware.ts';
 
 const router = express.Router();
 
@@ -11,4 +11,4 @@ router.post('/create', isLoggedIn, groupsController.createGroup);
 router.put('/leave/:groupId', isLoggedIn, groupsController.leaveGroup);
 router.put('/update', isLoggedIn, groupsController.updateGroup);
 
-module.exports = router;
+export default router;
