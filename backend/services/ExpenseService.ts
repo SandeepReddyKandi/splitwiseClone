@@ -26,14 +26,18 @@ class ExpenseService {
 
     static async settleAllBalancesBetweenUsers(byUser, toUser) {
         const values = { settledAt: Date.now() };
-        const condition = { returning: true, plain: true, where: { [Op.or]: [{ byUser, toUser }, { byUser: toUser, toUser: byUser }] } };
-        const result = await Expense.update(values, condition); // TODO
+        const condition = [{ byUser, toUser }, { byUser: toUser, toUser: byUser }];
+        const result = await Expense.updateMany({
+            $or : condition
+        }, values);
         return result;
     }
     static async getAllExpensesByGroupId(groupId, userId) {
         // TODO
-        const condition = { where: { [Op.or]: [{ byUser: userId, groupId }, { toUser: userId, groupId }] } };
-        const result = await Expense.find(condition);
+        const condition = [{ byUser: userId, groupId }, { toUser: userId, groupId }];
+        const result = await Expense.find({
+            $or: condition
+        });
         return result;
     }
     static async getAllExpensesForUserId(userId: string) {

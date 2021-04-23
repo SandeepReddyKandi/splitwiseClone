@@ -16,8 +16,7 @@ class UserService {
     }
 
     static async findUserByEmail(email) {
-        //TODO
-        const condition = email ? { email: { [Op.like]: `%${email}%` } } : null;
+        const condition = email ? { email:{$regex: email, $options: 'i'} } : null;
         const result = await User.findOne(condition);
         return result;
     }
@@ -26,7 +25,7 @@ class UserService {
         const { currency, phone, name, password, language, timezone, imageURL } = data;
         const values = { currency, phone, name, password, language, timezone, imageURL };
         const condition = { id: userId };
-        await User.update(values, condition); //TODO
+        await User.updateMany(condition, values);
         const user = await User.findOne({ id: userId });
         return user;
     }
@@ -37,15 +36,16 @@ class UserService {
     }
 
     static async unsetUserAppAccessToken(userId) {
-        const condition = { returning: true, plain: true, where: { id: userId } };
-        const user = await User.update({ token: '' }, condition); //TODO
+        const condition = { id: userId };
+        const user = await User.updateMany(condition, { token: '' });
         return user;
     }
 
     static async addUserAppAccessToken(userId, token) {
         const values = { token };
-        const condition = { returning: true, plain: true, where: { id: userId } };
-        const user = await User.update(values, condition);
+        // const condition = { returning: true, plain: true, where: { id: userId } };
+        const condition = { id: userId };
+        const user = await User.updateMany(condition, { token });
         return user;
     }
 

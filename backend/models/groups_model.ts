@@ -4,8 +4,8 @@ import { Document, Schema } from "mongoose";
 export interface IGroup extends Document {
     id: string,
     name: string,
-    acceptedUsers: string,
-    invitedUsers: string
+    acceptedUsers: string[],
+    invitedUsers: string[]
 }
 //     acceptedUsers: {
 //      type: DataTypes.STRING,

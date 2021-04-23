@@ -3,8 +3,8 @@ import Group from "../models/groups_model";
 
 class GroupService {
     static async findGroupByName(name) {
-        const condition = name ? {name: {[Op.like]: `%${name}%`}} : null;
-        const result = await Group.findOne({where: condition});
+        const condition = name ? { name:{$regex: name, $options: 'i'} }: null;
+        const result = await Group.findOne(condition);
         return result;
     }
 
@@ -32,10 +32,10 @@ class GroupService {
         if (!groupData) throw new Error('Invalid group id');
         if (groupData.acceptedUsers.includes(userId)) return groupData;
         const newInvitedUsers = _.filter(groupData.invitedUsers, user => user !== userId);
-        const newAcceptedUsers = [...groupData.acceptedUsers.split(';'), userId]; // TODO added the manipulation here
+        const newAcceptedUsers = [...groupData.acceptedUsers, userId];
         const values = {acceptedUsers: newAcceptedUsers, invitedUsers: newInvitedUsers};
-        const condition = {returning: true, plain: true, where: {id: groupId}};
-        const result = await Group.update(values, condition); // TODO
+        const condition = {id: groupId};
+        const result = await Group.updateMany(condition, values);
         return result;
     }
 
@@ -56,23 +56,21 @@ class GroupService {
             const result = await Group.deleteMany({id: groupId});
             return result;
         }
-        const condition = {returning: true, plain: true, where: {id: groupId}};
-        const result = await Group.update(values, condition); // TODO
+        const condition = {id: groupId};
+        const result = await Group.updateMany(condition, values);
         return result;
     }
 
     static async updateGroupDetails(data) {
         const {groupId, name} = data;
         const values = {name};
-        // TODO
-        const condition = {returning: true, plain: true, where: {id: groupId}};
-        const result = await Group.update(values, condition);
+        const condition = {id: groupId};
+        const result = await Group.updateMany(condition, values);
         return result;
     }
 
     static async getAllAcceptedUsersByGroupId(groupId) {
-        // TODO
-        const group = await Group.findOne({plain: true, where: {id: groupId}});
+        const group = await Group.findOne({id: groupId});
         const result = group.acceptedUsers;
         return result;
     }

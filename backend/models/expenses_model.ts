@@ -8,7 +8,7 @@ export interface IExpense extends Document {
   groupId: string
   amount: number,
   description: string,
-  settledAt: string,
+  settledAt: any,
   currency: string,
 }
 
@@ -18,7 +18,7 @@ const expenseSchema: Schema = new Schema({
   groupId: { type: String, required: true},
   amount: { type: Number, required: true},
   description: { type: String, required: true},
-  settledAt: { type: String, required: true},
+  settledAt: { type: Schema.Types.Mixed, required: true},
   currency: { type: String, required: true},
 }, { timestamps: true });
 
