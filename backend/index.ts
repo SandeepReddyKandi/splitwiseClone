@@ -1,7 +1,7 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
-import cors from 'cors';
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as mongoose from 'mongoose';
+import * as cors from 'cors';
 import { DB_URL, DEFAULT_PORT } from './config/config';
 import getLogger from './utils/logger';
 import userRouter from './routes/user_router';
@@ -27,6 +27,7 @@ mongoose.connect(DB_URL, {
 });
 
 mongoose.connection.once('open', () => {
+  console.log('Connected')
   getLogger().log('MongoDb is connected');
 });
 

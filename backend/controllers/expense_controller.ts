@@ -1,8 +1,8 @@
 import getLogger from '../utils/logger';
 import genericDTL from '../dtl/generic';
-import GroupService from '../services/GroupService.ts';
-import UserService from '../services/UserService.ts';
-import ExpenseService from '../services/ExpenseService.ts';
+import GroupService from '../services/GroupService';
+import UserService from '../services/UserService';
+import ExpenseService from '../services/ExpenseService';
 import expensesDtl from '../dtl/expenses_dtl';
 
 function getNameById(data, id) {
@@ -72,6 +72,7 @@ async function createGroupExpense(req, res, next) {
     const group = await GroupService.getGroupById(groupId);
     if (!group || !group.acceptedUsers.length) return res.send(genericDTL.getResponseDto('', 'Group not found'));
     const userIds = group.acceptedUsers;
+    // @ts-ignore
     const { currency } = group;
     const expenses = await ExpenseService.createGroupExpense({ userId, userIds, groupId, amount, description, currency });
     const resData = expensesDtl.getBasicExpensesDetailsDto(expenses);
@@ -135,8 +136,7 @@ async function settleExpense(req, res, next) {
     return next(err);
   }
 }
-
-module.exports = {
+export default {
   getBalanceByUser2Id,
   getAllExpenses,
   getAllExpensesForGroup,

@@ -1,6 +1,6 @@
-import express from 'express';
-import groupsController from '../controllers/group_controller.ts';
-import { isLoggedIn } from '../middlewares/auth_middleware.ts';
+import * as express from 'express';
+import groupsController from '../controllers/group_controller';
+import isLoggedIn  from '../middlewares/auth_middleware';
 
 const router = express.Router();
 

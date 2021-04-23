@@ -8,6 +8,4 @@ function getBasicUsersDetailDto(users) {
   return data;
 }
 
-module.exports = {
-  getBasicUsersDetailDto,
-};
+export default {getBasicUsersDetailDto}

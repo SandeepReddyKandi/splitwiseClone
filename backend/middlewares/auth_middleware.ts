@@ -1,8 +1,9 @@
 import * as _ from 'underscore';
-import config from '../config/config.js';
+import config from '../config/config';
 import authenticationUtil from '../utils/authentication';
 import genericDtl from '../dtl/generic';
 import getLogger from '../utils/logger';
+import UserService from "../services/UserService";
 
 async function isLoggedIn(req, res, next) {
   try {
@@ -22,9 +23,9 @@ async function isLoggedIn(req, res, next) {
       getLogger().error(`Error while trying to verify token. Err: ${err}`);
 
       const appAccessToken = bearerToken.split(' ')[1];
-      const user = await userRepo.getUserByAppAccessToken(appAccessToken);
+      const user = await UserService.getUserByAppAccessToken(appAccessToken);
       if (!_.isEmpty(user)) {
-        await userRepo.unsetUserAppAccessToken(user.Id);
+        await UserService.unsetUserAppAccessToken(user.id);
       }
 
       const response = genericDtl.getResponseDto({}, 'Unauthorized User!');
@@ -33,7 +34,7 @@ async function isLoggedIn(req, res, next) {
 
     const { decodedToken } = tokenData;
     const { userId } = decodedToken;
-    const decodedUser = await userRepo.getUserById(userId);
+    const decodedUser = await UserService.getUserById(userId);
     if (!decodedUser || _.isEmpty(decodedUser)) {
       const response = genericDtl.getResponseDto({}, 'Invalid token!');
       return res.status(401).send(response);
@@ -46,6 +47,4 @@ async function isLoggedIn(req, res, next) {
   }
 }
 
-module.exports = {
-  isLoggedIn,
-};
+export default isLoggedIn;

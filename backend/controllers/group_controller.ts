@@ -8,7 +8,6 @@ import ExpenseService from '../services/ExpenseService';
 async function getGroupInfo(req, res, next) {
   try {
     getLogger().info('controllers', 'getGroupInfo');
-    const { userId } = req.user;
     const { groupId } = req.params;
     const group = await GroupService.getGroupById(groupId);
     const response = genericDTL.getResponseDto(group);
@@ -72,6 +71,7 @@ async function leaveGroup(req, res, next) {
     getLogger().info('controllers', 'leaveGroup');
     const { userId } = req.user;
     const { groupId } = req.params;
+    // @ts-ignore
     const groupExpense = await ExpenseService.getGroupExpenseForUserId(groupId, userId);
     if (groupExpense && !_.isEmpty(groupExpense)) return res.send(genericDTL.getResponseDto('', 'You can not leave group without clearing dues.'));
     await GroupService.leaveGroup(userId, groupId);
@@ -100,7 +100,7 @@ async function updateGroup(req, res, next) {
   }
 }
 
-module.exports = {
+export default {
   getAllGroups,
   getGroupInfo,
   acceptGroupInvite,

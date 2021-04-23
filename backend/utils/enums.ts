@@ -1,4 +1,4 @@
-const currencyEnums = {
+export const currencyEnums = {
   USD: 'USD',
   KWD: 'KWD',
   BHD: 'BHD',
@@ -7,12 +7,7 @@ const currencyEnums = {
   CAD: 'CAD',
 };
 
-const expenseEnums = {
+export const expenseEnums = {
   CREATED: 'Created',
   SETTLED: 'Settled',
-};
-
-module.exports = {
-  currencyEnums,
-  expenseEnums,
 };

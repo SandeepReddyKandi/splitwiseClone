@@ -99,7 +99,9 @@ async function fetchBalance(req, res, next) {
   try {
     getLogger().info('controllers', 'fetchBalance');
     const { userId } = req.user;
+    // @ts-ignore
     const balance = await ExpenseService.fetchBalanceByUserId(userId);
+    // @ts-ignore
     const data = userDtl.getFetchBalanceDto(balance);
     const response = genericDTL.getResponseDto(data);
     return res.send(response);
@@ -135,11 +137,11 @@ async function getUserDetails(req, res, next) {
   }
 }
 
-module.exports = {
+export default {
   loginUser,
   signUpUser,
   fetchBalance,
   updateUserDetails,
   getAllUsers,
   getUserDetails,
-};
+}

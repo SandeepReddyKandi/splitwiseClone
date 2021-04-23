@@ -62,13 +62,13 @@ function getExpenseSummaryDto(data) {
         const name = getNameById(users, toUserId);
         const tempGroups = [];
         Object.keys(groups).forEach((id) => {
-          const obj = {};
+          const obj: any = {};
           obj.id = id;
           obj.amt = groups[id];
           obj.group = getNameById(allGroups, id);
           tempGroups.push(obj);
         });
-        const myObject = {};
+        const myObject: any = {};
         myObject.name = name;
         myObject.id = toUserId;
         myObject.totalAmt = totalAmount;
@@ -96,13 +96,13 @@ function getExpenseSummaryDto(data) {
         const name = getNameById(users, byUserId);
         const tempGroups = [];
         Object.keys(groups).forEach((id) => {
-          const obj = {};
+          const obj: any = {};
           obj.id = id;
           obj.amt = groups[id];
           obj.group = getNameById(allGroups, id);
           tempGroups.push(obj);
         });
-        const myObject = {};
+        const myObject: any = {};
         myObject.name = name;
         myObject.id = byUserId;
         myObject.totalAmt = totalAmount;
@@ -113,7 +113,7 @@ function getExpenseSummaryDto(data) {
       }
     }
   }
-  const result = {};
+  const result: any = {};
   totalcost = recieve - pay;
   result.totalcost = totalcost;
   result.pay = pay;
@@ -123,8 +123,8 @@ function getExpenseSummaryDto(data) {
   return result;
 }
 
-module.exports = {
+export default {
   getRecentExpensesDto,
   getExpenseSummaryDto,
   getBasicExpensesDetailsDto,
-};
+}

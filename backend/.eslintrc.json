@@ -1,5 +1,4 @@
 {
-  "extends": "airbnb-base",
   "parserOptions": { "ecmaVersion": 2018 },
   "rules": {
     "max-len": [1, 200, 2, { "ignoreComments": true }],

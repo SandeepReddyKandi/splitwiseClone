@@ -1,5 +1,5 @@
-import Expense '../models/expenses_model';
-import * as _ 'underscore';
+import Expense from '../models/expenses_model';
+import * as _ from 'underscore';
 
 class ExpenseService {
     static getTotalAmount(allExpenses) {
@@ -63,7 +63,4 @@ class ExpenseService {
         return result;
     }
 }
-
-module.exports = {
-    ExpenseService
-}
+export default ExpenseService;

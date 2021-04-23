@@ -15,7 +15,7 @@ async function verifyJwtToken(secretKey, bearerToken) {
   return { decodedToken, token };
 }
 
-module.exports = {
+export default {
   generateToken,
   verifyJwtToken,
-};
+}

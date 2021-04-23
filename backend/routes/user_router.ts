@@ -1,8 +1,8 @@
-import express from 'express';
-import multer from 'multer';
-import path from 'path';
+import * as express from 'express';
+import * as multer from 'multer';
+import * as path from 'path';
 import userController from '../controllers/user_controller';
-import { isLoggedIn } from '../middlewares/auth_middleware';
+import isLoggedIn  from '../middlewares/auth_middleware';
 
 const router = express.Router();
 

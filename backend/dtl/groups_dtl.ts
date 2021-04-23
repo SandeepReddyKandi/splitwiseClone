@@ -19,7 +19,7 @@ function getBasicGroupDetails(data) {
   return { id, name, acceptedUsers, invitedUsers, currency };
 }
 
-module.exports = {
+export default {
   getAllGroupsDto,
   getBasicGroupDetails,
-};
+}

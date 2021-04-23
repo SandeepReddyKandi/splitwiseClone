@@ -1,6 +1,7 @@
-import express from 'express';
-import expenseController from '../controllers/expense_controller.ts';
-import { isLoggedIn } from '../middlewares/auth_middleware.ts';
+import * as express from 'express';
+
+import expenseController from '../controllers/expense_controller';
+import isLoggedIn from '../middlewares/auth_middleware';
 
 const router = express.Router();
 

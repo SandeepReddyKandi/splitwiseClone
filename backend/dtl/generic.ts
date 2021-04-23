@@ -1,5 +1,9 @@
-function getResponseDto(data, reason, error) {
-  const response = { success: true };
+function getResponseDto(data?, reason?, error?) {
+  const response = { success: true,
+    reason: undefined,
+    error: undefined,
+    data: undefined
+  };
 
   if (reason) {
     response.success = false;
@@ -19,6 +23,4 @@ function getResponseDto(data, reason, error) {
   return response;
 }
 
-module.exports = {
-  getResponseDto,
-};
+export default {getResponseDto}
