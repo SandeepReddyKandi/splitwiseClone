@@ -7,8 +7,12 @@ import getLogger from './utils/logger';
 import userRouter from './routes/user_router';
 import groupRouter from './routes/groups_router';
 import expenseRouter from './routes/expense_router';
+import publishKafkaMessage from './kafka-producer';
 
 const app = express();
+
+// call the `produce` function and log an error if it occurs
+publishKafkaMessage({key: 'Init', value: 'Backend is running!'})
 
 app.use(cors());
 app.use((req, res, next) => {

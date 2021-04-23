@@ -7,6 +7,8 @@ import authenticationUtil from '../utils/authentication';
 import UserService from '../services/UserService';
 import ExpenseService from '../services/ExpenseService';
 import userDtl from '../dtl/user_dtl';
+import produce from "../kafka-producer";
+import publishKafkaMessage from "../kafka-producer";
 
 async function createHashedPassword(password) {
   const salt = await bcrypt.genSalt(10);
@@ -29,18 +31,23 @@ async function loginUser(req, res, next) {
       const loginToken = await authenticationUtil.generateToken(config.APP_TOKEN_SECRET, tokenData);
       await UserService.addUserAppAccessToken(user.id, loginToken);
       const userDetails = await UserService.getUserById(user.id);
+      // call the `produce` function and log an error if it occurs
+      publishKafkaMessage({key: '/login', value: userDetails});
       return res.send(genericDTL.getResponseDto(userDetails));
     }
+
+    publishKafkaMessage({key: '/login', value: 'Incorrect Password!'});
     return res.send(genericDTL.getResponseDto('', 'Incorrect password.'));
   } catch (err) {
-    getLogger().error(`User login failed. Err: ${err}`);
+    publishKafkaMessage({key: '/login', value: `User Login failed. Err: ${err}`});
+    // getLogger().error(`User Login failed. Err: ${err}`);
     return next(err);
   }
 }
 
 async function signUpUser(req, res, next) {
   try {
-    getLogger().info('controllers', 'signUpUser', req.body);
+    // getLogger().info('controllers', 'signUpUser', req.body);
     const { name, email, password, phone } = req.body;
     if (!name) throw new Error('name param required');
     if (!email) throw new Error('email param required');
@@ -58,8 +65,10 @@ async function signUpUser(req, res, next) {
     const loginToken = await authenticationUtil.generateToken(config.APP_TOKEN_SECRET, tokenData);
     await UserService.addUserAppAccessToken(newUser.id, loginToken);
     const userDetails = await UserService.getUserById(newUser.id);
+    publishKafkaMessage({key: '/signup', value: userDetails});
     return res.send(genericDTL.getResponseDto(userDetails));
   } catch (err) {
+    publishKafkaMessage({key: '/signup', value: `Unable to sign up user. Err ${err}`});
     getLogger().error(`Unable to sign up user. Err ${err}`);
     return next(err);
   }
