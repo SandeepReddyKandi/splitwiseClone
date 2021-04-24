@@ -360,6 +360,51 @@ tr.expense-list-row {
     }
 }
 
+.delete-popup-cont {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    background: #0000008f;
+    left: 0;
+    z-index: 99;
+    .delete-popup {
+        position: fixed;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        left: 50%;
+        padding: 36px 48px;
+        background: #26a69a;
+        h6 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 32px;
+        }
+        .button-cont {
+            display: flex;
+            justify-content: center;
+            .delete {
+                margin-right: 12px;
+                padding: 10px 16px;
+            }
+
+            .cancel {
+                background: #007272;
+                padding: 10px 16px;
+            }
+        }
+
+    }
+}
+button {
+    background: #ff652f;
+    color: #fff;
+    text-shadow: 0 -1px 0 #c83400;
+    border: 0;
+    padding: 3px 9px;
+    box-shadow: 2px 3px 6px #9d9d9d;
+}
+
 .chat-section-row {
     display: flex;
     flex-direction: column;
@@ -392,14 +437,7 @@ tr.expense-list-row {
                 }
             }
         }
-        button {
-            background: #ff652f;
-            color: #fff;
-            text-shadow: 0 -1px 0 #c83400;
-            border: 0;
-            padding: 3px 9px;
-            box-shadow: 2px 3px 6px #9d9d9d;
-        }
+
         .chat-area-cont {
             display: flex;
             flex-direction: row-reverse;

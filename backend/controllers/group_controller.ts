@@ -3,7 +3,6 @@ import getLogger from '../utils/logger';
 import genericDTL from '../dtl/generic';
 import groupsDtl from '../dtl/groups_dtl';
 import GroupService from '../services/GroupService';
-import ExpenseService from '../services/ExpenseService';
 
 async function getGroupInfo(req, res, next) {
   try {

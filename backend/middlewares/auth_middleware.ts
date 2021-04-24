@@ -39,10 +39,10 @@ async function isLoggedIn(req, res, next) {
       const response = genericDtl.getResponseDto({}, 'Invalid token!');
       return res.status(401).send(response);
     }
-    req.user = { userId: decodedUser.id, email: decodedUser.email };
+    req.user = { userId: decodedUser.id, email: decodedUser.email,  name: decodedUser.name };
     return next();
   } catch (err) {
-    getLogger().error(`Error while verifing user auth. Err: ${err}`);
+    getLogger().error(`Error while verifying user auth. Err: ${err}`);
     return next(err);
   }
 }

@@ -8,25 +8,7 @@ class ExpenseBackendAPIService {
 
     static async getAllPosts(expenseId) {
         const url = `${API_ENDPOINT}/${expenseId}`;
-        return {
-            success: true,
-            data: [{
-                id: '1',
-                author: 'Mukul',
-                comment: 'Is it okay, if I pay you this weekend?',
-                createdAt: 'Apr 23 2021',
-            }, {
-                id: '2',
-                author: 'Mukul2',
-                createdAt: 'Apr 23 2021',
-                comment: 'Yes, sure!'
-            }, {
-                id: '3',
-                author: 'Mukul3',
-                createdAt: 'Apr 23 2021',
-                comment: 'Cool, thanks Man!'
-            }],
-        }
+
         try {
             const response = await axios.get(url, {
                 headers: {
@@ -35,7 +17,7 @@ class ExpenseBackendAPIService {
             });
             return {
                 success: true,
-                data: response.data,
+                data: response.data.data,
             }
         } catch (e) {
             toast.error('Something went wrong while getting all posts!');
@@ -47,16 +29,8 @@ class ExpenseBackendAPIService {
 
     static async createPost(payload) {
         if (!payload.expenseId || !payload.comment) {
-            toast.error('Expense id and comment are required to post');
-        }
-        return {
-            success: true,
-            data: {
-                id: '4',
-                author: 'Mukul4',
-                createdAt: 'Apr 23 2021',
-                comment: payload.comment,
-            }
+            toast.error('Expense id and comment are required to create a post');
+            return;
         }
         const url = `${API_ENDPOINT}/create`;
         try {
@@ -69,10 +43,36 @@ class ExpenseBackendAPIService {
             })
             return {
                 success: true,
-                data: response.data
+                data: response.data.data
             }
         } catch (e) {
             toast.error('Something went wrong while adding the post!');
+            return {
+                success: false,
+            }
+        }
+    }
+
+    static async deletePost(payload) {
+        if (!payload.id) {
+            toast.error('Please select a post to delete it');
+            return;
+        }
+        const url = `${API_ENDPOINT}/delete/${payload.id}`;
+        try {
+            const response = await axios.delete(url, {
+                headers: {
+                    authorization: `Bearer ${this.getToken()}`
+                }
+            })
+            console.log(response);
+            debugger;
+            return {
+                success: true,
+                data: response.data.data
+            }
+        } catch (e) {
+            toast.error('Something went wrong while deleting the post!');
             return {
                 success: false,
             }

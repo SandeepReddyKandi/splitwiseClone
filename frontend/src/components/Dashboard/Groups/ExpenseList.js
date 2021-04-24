@@ -12,6 +12,7 @@ const ExpenseList = (props) => {
     const [comment, setComment] = useState('');
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [showChatSection, setShowChatSection] = useState(false);
+    const [selectedPost, setSelectedPost] = useState('');
 
     const {usersToIdMap, user} = useSelector(state => {
         const usersToIdMap =  state.userState.usersToIdMap;
@@ -22,6 +23,7 @@ const ExpenseList = (props) => {
     });
 
     const toggleShowChatSection = () => {
+        console.log(expList);
         getExpensePosts().then(() => {
             setShowChatSection(prevValue => !prevValue);
         });
@@ -29,9 +31,10 @@ const ExpenseList = (props) => {
 
     const getExpensePosts = async () => {
         if (!commentList.length) {
-            const postsRes = await PostBackendAPIService.getAllPosts(expList.id);
+            const postsRes = await PostBackendAPIService.getAllPosts(expList._id);
             if (postsRes.success) {
-                setCommentList(postsRes.data);
+                debugger;
+                setCommentList(postsRes.data || []);
             }
         }
     }
@@ -41,7 +44,7 @@ const ExpenseList = (props) => {
 
     const postComment = async () => {
         const postCommentRes = await PostBackendAPIService.createPost({
-            expenseId: expList.id,
+            expenseId: expList._id,
             comment,
         });
         if (postCommentRes.success) {
@@ -55,13 +58,25 @@ const ExpenseList = (props) => {
             toast.success('Comment Added Successfully!');
         }
     }
-    const handleDeletePost = () => {
+    const handleShowDeletePopup = (comment) => {
+        setSelectedPost(comment._id);
         setShowDeletePopup(true);
+    }
+
+    const handleDeletePost = async () => {
+        const updatedPostsRes = await PostBackendAPIService.deletePost({
+            id: selectedPost
+        });
+
+        if (updatedPostsRes.success) {
+            setCommentList(updatedPostsRes.data || []);
+            toast.success('Deleted Post successfully!');
+        }
     }
 
     return (
         <>
-            <tr key={expList.id} className='expense-list-row' onClick={toggleShowChatSection}>
+            <tr key={expList._id} className='expense-list-row' onClick={toggleShowChatSection}>
                 <div>
                     <div className='date-img-cont'>
                         <div className="date">
@@ -110,7 +125,9 @@ const ExpenseList = (props) => {
                                                             <b>{comment.author}</b> &nbsp; <i>{dayjs(comment.createdAt).format('MMMM DD, YYYY')}</i>
                                                         </span>
                                                         {comment.comment}
-                                                        <span className='delete-button' onClick={handleDeletePost}>X</span>
+                                                        {user.name !== comment.author && (
+                                                            <span className='delete-button' onClick={() => handleShowDeletePopup(comment)}>X</span>
+                                                        )}
                                                     </div>
                                                 </div>
                                             )
@@ -124,6 +141,19 @@ const ExpenseList = (props) => {
                                 </div>
                             </div>
                         </div>
+                        {
+                            showDeletePopup && (
+                                <div className='delete-popup-cont'>
+                                    <div className='delete-popup'>
+                                        <h6>Do you want to delete the selected Post?</h6>
+                                        <div className='button-cont'>
+                                            <button className='delete' onClick={handleDeletePost}>Delete</button>
+                                            <button className='cancel' onClick={() => setShowDeletePopup(false)}>Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        }
                     </tr>
                 )
             }

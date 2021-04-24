@@ -12,6 +12,12 @@ class ExpenseService {
         return total;
     }
 
+    static async findExpenseById(expenseId) {
+        const expense = await Expense.findById(expenseId);
+        console.log('===============EXPENSE IS============', expense);
+        return expense;
+    }
+
     static async getBalanceBetweenUsers(user1Id, user2Id) {
         const getCondition = {byUser: user1Id, toUser: user2Id, settledAt: null};
         const payCondition = {byUser: user2Id, toUser: user1Id, settledAt: null};

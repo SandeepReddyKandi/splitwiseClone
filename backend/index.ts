@@ -7,6 +7,7 @@ import getLogger from './utils/logger';
 import userRouter from './routes/user_router';
 import groupRouter from './routes/groups_router';
 import expenseRouter from './routes/expense_router';
+import postRouter from './routes/post_router';
 import publishKafkaMessage from './kafka-producer';
 
 const app = express();
@@ -38,6 +39,7 @@ mongoose.connection.once('open', () => {
 app.use('/user/', userRouter);
 app.use('/groups/', groupRouter);
 app.use('/expenses/', expenseRouter);
+app.use('/posts/', postRouter);
 
 app.use('/static/public', express.static(`${__dirname}/public`));
 // set port, listen for requests
