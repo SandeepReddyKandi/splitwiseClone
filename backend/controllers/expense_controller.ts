@@ -4,6 +4,7 @@ import GroupService from '../services/GroupService';
 import UserService from '../services/UserService';
 import ExpenseService from '../services/ExpenseService';
 import expensesDtl from '../dtl/expenses_dtl';
+import publishKafkaMessage from "../kafka-producer";
 
 function getNameById(data, id) {
   const value = data.find(entry => entry.id == id);
@@ -19,6 +20,7 @@ async function getBalanceByUser2Id(req, res, next) {
     if (!user) return res.send(genericDTL.getResponseDto('', 'User not found'));
     const { balance } = await ExpenseService.getBalanceBetweenUsers(userId, user2Id);
     const response = genericDTL.getResponseDto({ balance });
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Unable to get balance between users. Err. ${JSON.stringify(err)}`);
@@ -35,6 +37,7 @@ async function getAllExpenses(req, res, next) {
     const allGroups = await GroupService.getAllGroups();
     const data = expensesDtl.getExpenseSummaryDto({ getExpenses, payExpenses, userId, users, allGroups });
     const response = genericDTL.getResponseDto(data);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Unable to get all expenses. Err. ${JSON.stringify(err)}`);
@@ -57,6 +60,7 @@ async function getRecentExpenses(req, res, next) {
     }));
     const data = expensesDtl.getRecentExpensesDto({ users, groups, userId, expenses });
     const response = genericDTL.getResponseDto(data);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Unable to get recent expenses. Err. ${JSON.stringify(err)}`);
@@ -76,6 +80,7 @@ async function createGroupExpense(req, res, next) {
     const expenses = await ExpenseService.createGroupExpense({ userId, userIds, groupId, amount, description, currency });
     const resData = expensesDtl.getBasicExpensesDetailsDto(expenses);
     const response = genericDTL.getResponseDto(resData);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Unable to create expense. Err. ${JSON.stringify(err)}`);
@@ -89,6 +94,7 @@ async function getAllExpensesForGroup(req, res, next) {
     const { groupId } = req.params;
     const expenses = await ExpenseService.getAllExpensesForGroup(groupId);
     const response = genericDTL.getResponseDto(expenses);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Unable to settle expense. Err. ${JSON.stringify(err)}`);
@@ -114,6 +120,7 @@ async function getBalanceBetweenAllUsersForGroup(req, res, next) {
       }
     }
     const response = genericDTL.getResponseDto(balances);
+    publishKafkaMessage({ key: req.path, value: response})
     return res.send(response);
   } catch (err) {
     getLogger().error(`Unable to settle expense. Err. ${JSON.stringify(err)}`);
@@ -129,6 +136,7 @@ async function settleExpense(req, res, next) {
     const { user2Id } = req.params;
     const updatedDetails = await ExpenseService.settleAllBalancesBetweenUsers(userId, user2Id);
     const response = genericDTL.getResponseDto(updatedDetails);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Unable to settle expense. Err. ${JSON.stringify(err)}`);

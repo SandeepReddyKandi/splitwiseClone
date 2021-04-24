@@ -3,6 +3,7 @@ import getLogger from '../utils/logger';
 import genericDTL from '../dtl/generic';
 import groupsDtl from '../dtl/groups_dtl';
 import GroupService from '../services/GroupService';
+import publishKafkaMessage from "../kafka-producer";
 
 async function getGroupInfo(req, res, next) {
   try {
@@ -10,6 +11,7 @@ async function getGroupInfo(req, res, next) {
     const { groupId } = req.params;
     const group = await GroupService.getGroupById(groupId);
     const response = genericDTL.getResponseDto(group);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Unable to get groups info. Err. ${JSON.stringify(err)}`);
@@ -24,6 +26,7 @@ async function getAllGroups(req, res, next) {
     const groups = await GroupService.getAllGroupsByUserId(userId);
     const data = groupsDtl.getAllGroupsDto(groups);
     const response = genericDTL.getResponseDto(data);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Unable to get all groups. Err. ${JSON.stringify(err)}`);
@@ -40,6 +43,7 @@ async function acceptGroupInvite(req, res, next) {
     const updatedDetails = await GroupService.getGroupById(groupId);
     const data = groupsDtl.getBasicGroupDetails(updatedDetails);
     const response = genericDTL.getResponseDto(data);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Unable to accept group invite. Err. ${JSON.stringify(err)}`);
@@ -58,6 +62,7 @@ async function createGroup(req, res, next) {
     const newGroup = await GroupService.createGroup({ userId, name, currency, invitedUsers });
     const resData = groupsDtl.getBasicGroupDetails(newGroup);
     const response = genericDTL.getResponseDto(resData);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Unable to create new group. Err. ${JSON.stringify(err)}`);
@@ -76,6 +81,7 @@ async function leaveGroup(req, res, next) {
     const updatedDetails = await GroupService.getGroupById(groupId);
     const data = groupsDtl.getBasicGroupDetails(updatedDetails);
     const response = genericDTL.getResponseDto(data);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Unable to leave group. Err. ${JSON.stringify(err)}`);
@@ -91,6 +97,7 @@ async function updateGroup(req, res, next) {
     const updatedDetails = await GroupService.getGroupById(groupId);
     const data = groupsDtl.getBasicGroupDetails(updatedDetails);
     const response = genericDTL.getResponseDto(data);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Unable to update user details. Err. ${JSON.stringify(err)}`);

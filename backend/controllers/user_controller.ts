@@ -17,7 +17,6 @@ async function createHashedPassword(password) {
 
 async function loginUser(req, res, next) {
   try {
-    getLogger().info('controllers', 'loginUser', req.body);
     const { email, password } = req.body;
     if (!email) throw new Error('email param required');
     if (!password) throw new Error('password param required');
@@ -32,14 +31,14 @@ async function loginUser(req, res, next) {
       await UserService.addUserAppAccessToken(user.id, loginToken);
       const userDetails = await UserService.getUserById(user.id);
       // call the `produce` function and log an error if it occurs
-      publishKafkaMessage({key: '/login', value: userDetails});
+      publishKafkaMessage({key: req.url, value: userDetails});
       return res.send(genericDTL.getResponseDto(userDetails));
     }
 
-    publishKafkaMessage({key: '/login', value: 'Incorrect Password!'});
+    publishKafkaMessage({key: req.url, value: 'Incorrect Password!'});
     return res.send(genericDTL.getResponseDto('', 'Incorrect password.'));
   } catch (err) {
-    publishKafkaMessage({key: '/login', value: `User Login failed. Err: ${err}`});
+    publishKafkaMessage({key: req.url, value: `User Login failed. Err: ${err}`});
     // getLogger().error(`User Login failed. Err: ${err}`);
     return next(err);
   }
@@ -65,10 +64,10 @@ async function signUpUser(req, res, next) {
     const loginToken = await authenticationUtil.generateToken(config.APP_TOKEN_SECRET, tokenData);
     await UserService.addUserAppAccessToken(newUser.id, loginToken);
     const userDetails = await UserService.getUserById(newUser.id);
-    publishKafkaMessage({key: '/signup', value: userDetails});
+    publishKafkaMessage({key: req.url, value: userDetails});
     return res.send(genericDTL.getResponseDto(userDetails));
   } catch (err) {
-    publishKafkaMessage({key: '/signup', value: `Unable to sign up user. Err ${err}`});
+    publishKafkaMessage({key: req.url, value: `Unable to sign up user. Err ${err}`});
     getLogger().error(`Unable to sign up user. Err ${err}`);
     return next(err);
   }
@@ -82,7 +81,6 @@ async function updateUserDetails(req, res, next) {
     let payload;
     // let hashedPassword;
     // if (password) hashedPassword = await createHashedPassword(password);
-    console.log(req.file);
     if (req.file && req.file.filename) {
       payload = {
         ...rest,
@@ -98,6 +96,7 @@ async function updateUserDetails(req, res, next) {
     await UserService.updateUserDetailsById(userId, payload);
     const updatedDetails = await UserService.getUserById(userId);
     const response = genericDTL.getResponseDto(updatedDetails);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Unable to update user details. Err. ${JSON.stringify(err)}`);
@@ -114,6 +113,7 @@ async function fetchBalance(req, res, next) {
     // @ts-ignore
     const data = userDtl.getFetchBalanceDto(balance);
     const response = genericDTL.getResponseDto(data);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Error in fetching balance. Err: ${err}`);
@@ -127,6 +127,7 @@ async function getAllUsers(req, res, next) {
     const users = await UserService.getAllUsers();
     const data = userDtl.getBasicUsersDetailDto(users);
     const response = genericDTL.getResponseDto(data);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error(`Error in getting all users. Err: ${err}`);
@@ -140,6 +141,7 @@ async function getUserDetails(req, res, next) {
     const { userId } = req.user;
     const user = await UserService.getUserById(userId);
     const response = genericDTL.getResponseDto(user);
+    publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
     getLogger().error('Error in getUserDetails', JSON.stringify(err));

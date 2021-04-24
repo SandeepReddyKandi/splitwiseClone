@@ -2,15 +2,13 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as mongoose from 'mongoose';
 import * as cors from 'cors';
-import { DB_URL, DEFAULT_PORT } from './config/config';
+import {DB_URL, DEFAULT_PORT} from './config/config';
 import getLogger from './utils/logger';
 import userRouter from './routes/user_router';
 import groupRouter from './routes/groups_router';
 import expenseRouter from './routes/expense_router';
 import postRouter from './routes/post_router';
 import publishKafkaMessage from './kafka-producer';
-import ImageUploadService from "./services/ImageUploadService";
-import ImageService from "./services/ImageUploadService";
 
 const app = express();
 
