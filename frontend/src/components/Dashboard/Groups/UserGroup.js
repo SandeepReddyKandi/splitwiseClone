@@ -7,9 +7,9 @@ import "materialize-css/dist/css/materialize.min.css";
 import ExpenseBackendAPIService from "../../../services/ExpenseBackendAPIService";
 import GroupBackendAPIService from "../../../services/GroupBackendAPIService";
 import UserBackendAPIService from '../../../services/UserBackendAPIService';
+import {useDispatch, useSelector} from "react-redux";
 
 const UserGroups = (props)=>{
-    const [groupExpenses, setGroupExpenses] = useState();
     const [group, setGroup] = useState({
         name: '',
     });
@@ -17,6 +17,14 @@ const UserGroups = (props)=>{
     const [allUserExpense, setAllUserExpenses] = useState('');
     const [showUsers, getShowUsers] = useState('');
     const [remainingUsers, getHiddeUsers] = useState('');
+
+    const dispatch = useDispatch();
+
+    const { groupExpensesRedux } = useSelector(state => {
+        return {
+            groupExpensesRedux: state.expenseState.groupExpensesMap,
+        }
+    });
 
     useEffect(() => {
         setGroupId(props.match.params.id);
@@ -31,11 +39,10 @@ const UserGroups = (props)=>{
             setGroup(data);
         });
 
-
         // getting all the expenses
         ExpenseBackendAPIService.getAllExpensesForGroupId(groupId).then(({data, success})=>{
-            if(success){
-                 setGroupExpenses(data);
+            if (success) {
+                updateGroupExpense(data);
             }
         });
 
@@ -48,6 +55,16 @@ const UserGroups = (props)=>{
             }
         });
     }, [groupId]);
+
+    const updateGroupExpense = (expenses) => {
+        dispatch({
+            type: 'ADD_GROUP_EXPENSES',
+            payload: {
+                groupId,
+                expenses,
+            }
+        });
+    }
 
     return (
         <div className="container user-groups">
@@ -63,36 +80,25 @@ const UserGroups = (props)=>{
                         </div>
                     </div>
                     {
-                        groupExpenses ?
-                        (
+                        groupExpensesRedux[groupId] ?
                             (
                                 <div className='expense-list-cont'>
                                     <table className="centered highlight expenses-list-table">
                                         <tbody>
                                         {
-                                            groupExpenses.length ?
-                                            (
-                                                groupExpenses.map((expenses)=>{
-                                                    return (
-                                                        <ExpenseList expenselist={expenses} key={expenses.id}/>
-                                                    )
-                                                })
-                                            )
-                                            :
-                                            (
-                                                <tr>
-                                                    <td>No expenses made yet....</td>
-                                                </tr>
-                                            )
+                                            groupExpensesRedux[groupId].length && groupExpensesRedux[groupId].map((expenses)=>{
+                                                return (
+                                                    <ExpenseList expenselist={expenses} key={expenses.id}/>
+                                                )
+                                            })
                                         }
                                         </tbody>
                                     </table>
                                 </div>
+                            ):
+                            (
+                                <div>No Group expenses :) </div>
                             )
-                        ):
-                        (
-                            <div>Loading.....</div>
-                        )
                     }
                 </div>
                  <div className="col m4">

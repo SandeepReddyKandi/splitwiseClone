@@ -31,32 +31,18 @@ class Modal extends Component {
       })
   }
 
-  setDate = (e)=>{
-    const date = (e.target.value).split("-");
-    const months = [
-        "jan", "Feb", "March", "April", "May", "June", "July", "Agust", "Sept",
-        "Oct", "Nov", "Dec"
-    ]
-    this.setState({
-        ...this.state,
-        date: {
-            month: months[date[1]-1],
-            day: date[2]
-        }
-    })
-  }
-
-  addExpense = ()=>{
+  addExpense = () => {
     ExpenseBackendAPIService.createExpense({
       groupId : this.state.groupId,
       amount: this.state.amount,
       description: this.state.description
     }).then(({data, success})=>{
-            if(success){
+            if(success && data && data.length){
               toast.success(`Successfully added expense for amount ${this.state.amount}`);
-              // this.props.addExpense({
-              //     groupName:
-              // })
+              this.props.addExpense({
+                  groupId: this.state.groupId,
+                  expenses: [data[0]],
+              })
             }
     });
   }
@@ -109,7 +95,7 @@ const mapDispatchToProps = (dispatch)=>{
     return {
         addExpense : (state)=>{
             dispatch({
-                type : "ADD_NEW_EXPENSE",
+                type : "ADD_GROUP_EXPENSE",
                 payload: state
             })
         }

@@ -1,6 +1,7 @@
  const initState = {
     recentActivities: [],
     recieve: [],
+    groupExpensesMap: {},
     pay: [],
 }
 
@@ -29,17 +30,39 @@ const expenseReducer = (state = initState, action)=>{
         case "DELETE_USER":
             const username = action.payload.userName;
 
-            console.log('action: ',username);
+            console.log('action: ', username);
 
-            const recieveList = state.recieve.filter((user)=> user.name !== username);
+            const recieveList = state.recieve.filter((user) => user.name !== username);
             const payingList = state.pay.filter((user) => user.name !== username);
 
             return {
                 ...state,
-                recieve : recieveList,
-                pay : payingList
+                recieve: recieveList,
+                pay: payingList
             }
-
+        case "ADD_GROUP_EXPENSE": {
+            return {
+                ...state,
+                groupExpensesMap: {
+                    ...state.groupExpensesMap,
+                    [action.payload.groupId]: [
+                        ...state.groupExpensesMap[action.payload.groupId],
+                        ...action.payload.expenses,
+                    ]
+                }
+            }
+        }
+        case "ADD_GROUP_EXPENSES": {
+            return {
+                ...state,
+                groupExpensesMap: {
+                    ...state.groupExpensesMap,
+                    [action.payload.groupId]: [
+                        ...action.payload.expenses,
+                    ]
+                }
+            }
+        }
         default:
             return state;
     }
