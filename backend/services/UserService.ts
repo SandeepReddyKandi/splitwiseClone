@@ -24,7 +24,8 @@ class UserService {
         const values = { currency, phone, name, password, language, timezone, imageURL };
         const condition = { _id: userId };
         await User.updateOne(condition, values);
-        const user = await User.findOne({ _id: userId });
+        console.log('-----', imageURL);
+        const user = await User.findById(userId);
         return user;
     }
 

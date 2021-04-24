@@ -10,6 +10,7 @@ export interface IUser extends Document {
     language: string,
     phone: string,
     timezone: string,
+    imageURL: string,
 }
 
 const userSchema: Schema = new Schema({
@@ -20,6 +21,7 @@ const userSchema: Schema = new Schema({
     phone: { type: String },
     language: { type: String },
     timezone: { type: String },
+    imageURL: { type: String },
 }, { timestamps: true });
 
 export default mongoose.model<IUser>("User", userSchema);

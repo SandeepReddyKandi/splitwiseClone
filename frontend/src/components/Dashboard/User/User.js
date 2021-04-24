@@ -9,6 +9,7 @@ import {toast} from "react-toastify";
 const User = (props)=>{
     const initUser = useSelector(state => {
         const { user } = state.userState;
+        console.log(user);
         return  {
             name: user.name,
             email: user.email,
@@ -50,7 +51,7 @@ const User = (props)=>{
         }
         UserBackendAPIService.updateUserDetails(formData).then(({data, success})=>{
             if (success) {
-                console.log('data : ',data);
+                props.updateUserData(data);
                 toast.success('User info updated successfully!')
             } else {
                 toast.error('Could Not Update Your Info, Please Try Again!')
@@ -197,6 +198,12 @@ const mapDispatchToProps = (dispatch)=>{
         logout: ()=>{
             dispatch({
                 type: 'LOG_OUT',
+            })
+        },
+        updateUserData: (payload)=>{
+            dispatch({
+                type: 'UPDATE_USER_DATA',
+                payload,
             })
         }
     }

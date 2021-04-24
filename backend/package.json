@@ -46,6 +46,7 @@
     "mongoose": "^5.12.5",
     "morgan": "^1.8.2",
     "multer": "^1.4.2",
+    "multer-gridfs-storage": "^4.2.0",
     "node-gcm": "^0.14.6",
     "numeral": "^2.0.6",
     "request": "^2.81.0",

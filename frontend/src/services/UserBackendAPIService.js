@@ -17,7 +17,7 @@ class UserBackendAPIService {
             return response.data.data.map(user => {
                 return {
                     ...user,
-                    imageURL: user.imageURL ? `${process.env.REACT_APP_ENDPOINT}/static/${user.imageURL}` : null,
+                    imageURL: user.imageURL ? `${process.env.REACT_APP_ENDPOINT}/file/${user.imageURL}` : null,
                 }
             });
         } catch (e) {
@@ -114,7 +114,7 @@ class UserBackendAPIService {
             return {
                 data: {
                     ...data.data,
-                    imageURL: data.data.imageURL ? `${process.env.REACT_APP_ENDPOINT}/static/${data.data.imageURL}` : null,
+                    imageURL: data.data.imageURL ? `${process.env.REACT_APP_ENDPOINT}/file/${data.data.imageURL}` : null,
                 },
                 success: true,
             };
@@ -140,8 +140,8 @@ class UserBackendAPIService {
             return {
                 success: true,
                 data: {
-                    ...response.data,
-                    imageURL: response.data.imageURL ? `${process.env.REACT_APP_ENDPOINT}/static/${response.data.imageURL}` : null,
+                    ...response.data.data,
+                    imageURL: response.data.data.imageURL ? `${process.env.REACT_APP_ENDPOINT}/file/${response.data.data.imageURL}` : null,
                 }
             };
         } catch (e) {
@@ -167,7 +167,7 @@ class UserBackendAPIService {
             return {
                 data: {
                     ...data.data,
-                    imageURL: data.data.imageURL ? `${process.env.REACT_APP_ENDPOINT}/static/${data.data.imageURL}` : null,
+                    imageURL: data.data.imageURL ? `${process.env.REACT_APP_ENDPOINT}/file/${data.data.imageURL}` : null,
                 },
                 success: true,
             }

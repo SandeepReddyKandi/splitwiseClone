@@ -33,7 +33,6 @@ const ExpenseList = (props) => {
         if (!commentList.length) {
             const postsRes = await PostBackendAPIService.getAllPosts(expList._id);
             if (postsRes.success) {
-                debugger;
                 setCommentList(postsRes.data || []);
             }
         }

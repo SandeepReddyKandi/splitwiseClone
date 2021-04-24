@@ -66,7 +66,6 @@ class ExpenseBackendAPIService {
                 }
             })
             console.log(response);
-            debugger;
             return {
                 success: true,
                 data: response.data.data

@@ -80,18 +80,19 @@ async function updateUserDetails(req, res, next) {
     const { userId } = req.user;
     const { password, ...rest } = req.body;
     let payload;
-    let hashedPassword;
-    if (password) hashedPassword = await createHashedPassword(password);
-    if (req.file) {
+    // let hashedPassword;
+    // if (password) hashedPassword = await createHashedPassword(password);
+    console.log(req.file);
+    if (req.file && req.file.filename) {
       payload = {
         ...rest,
-        password: hashedPassword,
-        imageURL: req.file.path,
+        // password: hashedPassword,
+        imageURL:  req.file.filename,
       };
     } else {
       payload = {
         ...rest,
-        password: hashedPassword,
+        // password: hashedPassword,
       };
     }
     await UserService.updateUserDetailsById(userId, payload);

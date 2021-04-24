@@ -28,6 +28,16 @@ const userReducer = (state = initState, action)=> {
       }
     }
 
+    case 'UPDATE_USER_DATA' : {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          ...action.payload,
+        }
+      }
+    }
+
     case 'ADD_ACTIVE_GROUPS':{
       return {
         ...state,
