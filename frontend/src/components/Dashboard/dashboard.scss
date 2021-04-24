@@ -15,7 +15,7 @@ td p{
     margin: 0;
 }
 
-.container { 
+.container {
     width: 100% !important;
 }
 
@@ -94,9 +94,8 @@ td p{
     margin-top: 0;
 }
 
-.dashboard-header img{
-    filter: gray;
-    filter: grayscale(1); 
+.dashboard-header img {
+    filter: grayscale(1);
 }
 
 .dashboard-header span,
@@ -126,26 +125,13 @@ td p{
     font-weight: 600;
 }
 
-/* .expenseBtn button{
-    margin: 0 auto;
-} */
-
-.expenseBtn{
-    /* margin: 0 auto; */
-}
-
 .expenses-list-table {
     width: 100%;
     margin: 0;
     margin-bottom:10px;
 }
 
-.expenses-list-table tr:last-child{
-    border-bottom: none;
-}
-
 .sidebar-header {
-    /* margin: 30px; */
     padding: 3rem !important;
 }
 
@@ -158,14 +144,24 @@ td p{
     border: none;
 }
 
-.date{
+.date-img-cont {
     display: flex;
-    flex-direction:column;
-    font-weight: bold;
-}
-
-.date .day{
-    font-size: 1.2rem;
+    justify-content: space-between;
+    .date {
+        display: flex;
+        flex-direction:column;
+        font-weight: bold;
+        margin-right: 14px;
+        .day{
+            font-size: 1.2rem;
+        }
+    }
+    .img-cont {
+        width: 48px;
+        img {
+            width: 100%;
+        }
+    }
 }
 
 .vanish{
@@ -336,4 +332,119 @@ option {
     width: 100%;
     padding : 10px;
     margin: auto auto;
+}
+
+.user-groups {
+    .header {
+        padding: 0!important;
+        margin: 0!important;
+    }
+    .expense-list-col.col {
+        padding: 0!important;
+    }
+}
+
+tr.expense-list-row {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    padding: 10px 24px;
+    cursor: pointer;
+    .exp-description {
+        flex: 1;
+    }
+    .exp-amount {
+        display: flex;
+        flex-direction: column;
+        padding: 0 20px;
+    }
+}
+
+.chat-section-row {
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f8f8;
+    padding: 14px;
+    .chat-section {
+        .expense-detail-cont {
+            display: flex;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #999;
+            .img-cont {
+                width: 96px;
+                margin-right: 24px;
+                img {
+                    width: 100%;
+                }
+            }
+            .expense-detail {
+                p {
+                    margin: 0;
+                    &.added-info {
+                        margin: 6px 0;
+                        font-size: 12px;
+                        color: #999;
+                    }
+                }
+                h5 {
+                    margin: 0;
+                    padding: 2px 0 0 0;
+                }
+            }
+        }
+        button {
+            background: #ff652f;
+            color: #fff;
+            text-shadow: 0 -1px 0 #c83400;
+            border: 0;
+            padding: 3px 9px;
+            box-shadow: 2px 3px 6px #9d9d9d;
+        }
+        .chat-area-cont {
+            display: flex;
+            flex-direction: row-reverse;
+            .comments {
+                h4 {
+                    font-size: 16px;
+                    margin: 8px 0;
+                    position: relative;
+                    padding-left: 22px;
+                    img {
+                        position: absolute;
+                        width: 16px;
+                        top: 2px;
+                        left: 0;
+                    }
+                }
+                textarea {
+                    resize: vertical;
+                }
+                .add-comment {
+
+                }
+                .comment {
+                    margin-bottom: 10px;
+                    .post-block {
+                        padding: 32px 16px 12px;
+                        border-radius: 5px;
+                        border: 1px solid #999;
+                        position: relative;
+                        .author {
+                            position: absolute;
+                            top: 4px;
+                            left: 16px;
+                        }
+                        .delete-button {
+                            position: absolute;
+                            top: 4px;
+                            right: 16px;
+                            width: 14px;
+                            font-weight: bold;
+                            color: #f8642e;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

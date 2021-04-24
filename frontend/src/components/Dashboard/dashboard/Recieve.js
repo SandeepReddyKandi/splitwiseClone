@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import '../dashboard.css';
+import '../dashboard.scss';
 
 const Recieve = (recieve) => {
     const [getPayment, setGetPayment] = useState(recieve.paymentList);

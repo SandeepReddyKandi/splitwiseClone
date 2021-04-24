@@ -11,7 +11,7 @@ const kafka = new Kafka({ clientId, brokers })
 const producer = kafka.producer();
 
 const produce = async ({key, value}) => {
-    await producer.connect()
+    // await producer.connect()
     // after the produce has connected, we can send our data
     try {
         // send a message to the configured topic with

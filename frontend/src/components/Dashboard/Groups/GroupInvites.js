@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, connect} from 'react-redux';
-import '../dashboard.css'
+import '../dashboard.scss'
 import axios from 'axios';
 import {toast} from "react-toastify";
 import GroupBackendAPIService from "../../../services/GroupBackendAPIService";

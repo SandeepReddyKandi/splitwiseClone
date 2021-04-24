@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { useSelector} from 'react-redux';
 import ExpenseList from './ExpenseList';
 import axios from 'axios';
-import '../dashboard.css';
+import '../dashboard.scss';
 import {toast} from "react-toastify";
 import {connect} from "react-redux";
 import ExpenseBackendAPIService from '../../../services/ExpenseBackendAPIService';
@@ -24,7 +24,7 @@ const RecentActivityComponent = (props)=>{
                 setRecentActivities(data);
             }
         })
-    },[]);    
+    },[]);
 
     return (
         <div className="container user-groups">

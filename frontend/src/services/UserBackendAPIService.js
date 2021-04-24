@@ -14,14 +14,18 @@ class UserBackendAPIService {
                     authorization: `Bearer ${this.getToken()}`
                 }
             })
-            return response.data.map(user => {
+            return response.data.data.map(user => {
                 return {
                     ...user,
                     imageURL: user.imageURL ? `${process.env.REACT_APP_ENDPOINT}/static/${user.imageURL}` : null,
                 }
             });
         } catch (e) {
-            // toast.error('Something went wrong while getting all users!');
+            if (e.response && e.response.data && e.response.data.message) {
+                toast.error(e.response.data.message);
+            } else {
+                toast.error(`Something went wrong while getting all users!`);
+            }
             return {
                 success: false,
             }

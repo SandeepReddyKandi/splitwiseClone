@@ -5,12 +5,12 @@ import SignUpComponent from "./components/SignUpComponent";
 import HomeComponent from "./components/HomeComponent";
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./App.css";
 import Dashboard from './components/Dashboard/Dashboard';
 import User from './components/Dashboard/User/User';
 import ProtectedRoute from "./components/ProtectedRoute";
 import UserBackendAPIService from "./services/UserBackendAPIService";
 import {connect} from "react-redux";
+import "./App.css";
 
 function App(props) {
     useEffect(() => {
@@ -19,12 +19,18 @@ function App(props) {
     }, []);
 
     const initReduxStore = async () => {
-        const user = await UserBackendAPIService.getUserDetails();
-        if (user.success) {
-            props.updateUserData(user.data);
-            console.log(`Already Logged In As ${user.data.name}`);
-        } else {
-            console.log('Please Login Or Signup');
+        const token = localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')) : null;
+        if (token) {
+            const user = await UserBackendAPIService.getUserDetails();
+            if (user.success) {
+                props.updateUserData(user.data);
+                const allUsersRes = await UserBackendAPIService.getAllUsers();
+                console.log(allUsersRes)
+                props.addUsersList(allUsersRes);
+                console.log(`Already Logged In As ${user.data.name}`);
+            } else {
+                console.log('Please Login Or Signup');
+            }
         }
     }
 
@@ -60,6 +66,12 @@ const mapDispatchToProps = (dispatch)=>{
         updateUserData : (state) => {
             dispatch({
                 type : "ADD_USER_DATA",
+                payload: state
+            })
+        },
+        addUsersList : (state) => {
+            dispatch({
+                type : "ADD_USER_LISTS",
                 payload: state
             })
         }

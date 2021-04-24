@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import ExpenseList from './ExpenseList';
-import '../dashboard.css';
+import '../dashboard.scss';
 import Modal from './Modal';
 import './Modal.css'
 import "materialize-css/dist/css/materialize.min.css";
@@ -10,7 +10,6 @@ import UserBackendAPIService from '../../../services/UserBackendAPIService';
 
 const UserGroups = (props)=>{
     const [groupExpenses, setGroupExpenses] = useState();
-    const [users, getAllUsers] = useState();
     const [group, setGroup] = useState({
         name: '',
     });
@@ -21,7 +20,7 @@ const UserGroups = (props)=>{
 
     useEffect(() => {
         setGroupId(props.match.params.id);
-    })
+    }, [])
 
     useEffect(()=>{
         document.querySelector("#extraInfo").classList.add('vanish');
@@ -30,7 +29,7 @@ const UserGroups = (props)=>{
 
         GroupBackendAPIService.getGroupInfo(groupId).then(({data, success}) => {
             setGroup(data);
-        },[]);
+        });
 
 
         // getting all the expenses
@@ -38,7 +37,7 @@ const UserGroups = (props)=>{
             if(success){
                  setGroupExpenses(data);
             }
-        },[]);
+        });
 
         ExpenseBackendAPIService.getBalanceOfEachUserInGoupId(groupId).then(({data, success})=>{
             if(success){
@@ -47,20 +46,13 @@ const UserGroups = (props)=>{
                 getShowUsers(data.splice(0, 1));
                 getHiddeUsers(data.splice(1, data.length));
             }
-        },[]);
-
-        // to get all the user
-        UserBackendAPIService.getAllUsers().then(({data, success})=>{
-            if(success){
-                getAllUsers(data);
-            }
         });
     }, [groupId]);
 
     return (
         <div className="container user-groups">
             <div className="row">
-                <div className="col m8 z-depth-1">
+                <div className="expense-list-col col m8 z-depth-1">
                     <div className="header row valign-wrapper grey lighten-2">
                         <div className="col m6 valign-wrapper">
                                 <img className="responsive-img" src="https://img.icons8.com/flat-round/64/000000/home--v1.png"/>
@@ -74,7 +66,7 @@ const UserGroups = (props)=>{
                         groupExpenses ?
                         (
                             (
-                                <div>
+                                <div className='expense-list-cont'>
                                     <table className="centered highlight expenses-list-table">
                                         <tbody>
                                         {

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import '../dashboard.css';
+import '../dashboard.scss';
 
 const Give = (give)=>{
     const [givePayment, setPayment] = useState(give.paymentList);

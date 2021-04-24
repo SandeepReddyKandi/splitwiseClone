@@ -3,3 +3,7 @@
     top: unset!important;
     right: 1em;
 }
+
+td, th {
+    padding: 0 !important;
+}

@@ -7,7 +7,7 @@ import { Link, Switch } from "react-router-dom";
 import { BrowserRouter, Router, Route, Redirect } from "react-router-dom";
 import UserGroups from './Groups/UserGroup';
 import User from './User/User';
-import './dashboard.css';
+import './dashboard.scss';
 import CreateNewGroup from './CreateNewGroup';
 import Invites from './Groups/GroupInvites';
 

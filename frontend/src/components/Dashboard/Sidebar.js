@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Link, Switch } from "react-router-dom";
 import {useSelector} from 'react-redux';
 import Dashboard from './Dashboard';
-import './dashboard.css';
+import './dashboard.scss';
 import CreateNewGroup from './CreateNewGroup';
 import axios from 'axios';
 import GroupBackendAPIService from "../../services/GroupBackendAPIService";

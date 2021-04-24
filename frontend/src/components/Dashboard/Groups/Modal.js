@@ -1,9 +1,8 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, {Component} from "react";
+import {connect} from "react-redux";
 import './Modal.css'
 import M from "materialize-css";
 import "materialize-css/dist/css/materialize.min.css";
-import axios from 'axios';
 import ExpenseBackendAPIService from "../../../services/ExpenseBackendAPIService";
 import {toast} from "react-toastify";
 
@@ -47,7 +46,6 @@ class Modal extends Component {
     })
   }
 
-  // divide expense equally among all the menbers of this group,(api call)
   addExpense = ()=>{
     ExpenseBackendAPIService.createExpense({
       groupId : this.state.groupId,
@@ -60,15 +58,6 @@ class Modal extends Component {
               //     groupName:
               // })
             }
-    //        amount: 1000
-        // byUser: "9c034fda-d94c-4bd4-ab36-d1beb873dce8"
-        // createdAt: "2021-03-17T10:52:08.472Z"
-        // currency: "USD"
-        // description: "This is a test message for the Paper2"
-        // groupId: "03c53b8d-5600-4033-8247-3d14ff96ac8f"
-        // id: "750af0e5-7658-4161-af7e-119d60558446"
-        // toUser: "9484ee35-a152-4d68-b136-157279aaa9a6"
-        // updatedAt: "2021-03-17T10:52:08.472Z"
     });
   }
 

@@ -3,7 +3,7 @@ import { useSelector} from 'react-redux';
 import Recieve from './Recieve';
 import Give from './GivePayment';
 import Modal from './Modal';
-import '../dashboard.css';
+import '../dashboard.scss';
 import './Modal.css'
 import "materialize-css/dist/css/materialize.min.css";
 import ExpenseBackendAPIService from "../../../services/ExpenseBackendAPIService";

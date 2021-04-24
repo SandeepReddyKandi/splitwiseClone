@@ -11,7 +11,9 @@ const initState = {
     token: '',
   },
   activeGroups : [],
-  invitedGroups : []
+  invitedGroups : [],
+  usersList: [],
+  usersToIdMap: {}
 };
 
 const userReducer = (state = initState, action)=> {
@@ -68,6 +70,19 @@ const userReducer = (state = initState, action)=> {
       return {
         ...state,
         invitedGroups : state.invitedGroups.filter(group => group.id !== action.payload.id)
+      }
+    }
+
+    case 'ADD_USER_LISTS': {
+      const usersToIdMap = {};
+      const usersList = action.payload || [];
+      usersList.map(user => {
+        usersToIdMap[user.id] = user.name
+      })
+      return {
+        ...state,
+        usersList,
+        usersToIdMap
       }
     }
 
