@@ -203,7 +203,7 @@ const mapDispatchToProps = (dispatch)=>{
 	return {
 		addActiveGroup : (state)=>{
 			dispatch({
-				type : 'ADD_ACTIVE_GROUPS',
+				type : 'ADD_ACTIVE_GROUP',
 				payload : state
 			})
 		}

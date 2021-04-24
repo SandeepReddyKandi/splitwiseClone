@@ -12,7 +12,7 @@ const Invites = (props)=>{
 
     useEffect(() => {
         GroupBackendAPIService.getAllGroups().then(({data, success})=>{
-            if (success){
+            if (success) {
                 props.addActiveGroups(data.acceptedGroups);
                 props.addInvites(data.invitedGroups);
                 setInvitedGroups(data.invitedGroups.map(group => {
@@ -27,8 +27,6 @@ const Invites = (props)=>{
                         show: true,
                     }
                 }))
-            } else {
-                toast.error(data.reason);
             }
         })
     },[]);
@@ -150,13 +148,13 @@ const Invites = (props)=>{
 
 const mapStateToProps = (state)=>{
     return {
-        activeGroups: state.userState.activeGroups.map(group => {
+        activeGroups: state.groupState.acceptedGroups.map(group => {
             return {
                 ...group,
                 show: true,
             }
         }),
-        invitedGroups: state.userState.invitedGroups.map(group => {
+        invitedGroups: state.groupState.invitedGroups.map(group => {
             return {
                 ...group,
                 show: true,

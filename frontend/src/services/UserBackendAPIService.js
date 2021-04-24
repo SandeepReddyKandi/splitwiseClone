@@ -32,66 +32,6 @@ class UserBackendAPIService {
         }
     }
 
-    static async createGroup(invite) {
-        if (!invite.id) {
-            toast.error('Please select a group to accept invitation!');
-        }
-        const url = `${API_ENDPOINT}/accept-invite/${invite.id}`;
-        try {
-            const response = await axios.put(url, null,{
-                headers: {
-                    authorization: `Bearer ${this.getToken()}`
-                }
-            })
-            return response.data;
-        } catch (e) {
-            toast.error('Something went wrong while creating group!');
-            return {
-                success: false,
-            }
-        }
-    }
-
-    static async leaveGroup(invite) {
-        if (!invite.id) {
-            toast.error('Please select a group to accept invitation!');
-        }
-        const url = `${API_ENDPOINT}/leave/${invite.id}`;
-        try {
-            const response = await axios.put(url, null,{
-                headers: {
-                    authorization: `Bearer ${this.getToken()}`
-                }
-            });
-            return response.data;
-        } catch (e) {
-            toast.error('Something went wrong while leaving group!');
-            return {
-                success: false,
-            }
-        }
-    }
-
-    static async getGroupInfo(groupId) {
-        if (!groupId) {
-            toast.error('Cannot get group info without group Id!');
-        }
-        const url = `${API_ENDPOINT}/${groupId}`;
-        try {
-            const response = await axios.get(url,{
-                headers: {
-                    authorization: `Bearer ${this.getToken()}`
-                }
-            });
-            return response.data;
-        } catch (e) {
-            toast.error('Something went wrong while getting group info!');
-            return {
-                success: false,
-            }
-        }
-    }
-
     static async getUserDetails(payload) {
         const url = `${API_ENDPOINT}/me`;
         // if token is not present return the error state

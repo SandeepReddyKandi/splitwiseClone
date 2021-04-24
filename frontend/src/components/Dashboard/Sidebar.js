@@ -1,35 +1,21 @@
-import React, {useState, useEffect} from 'react';
-import { Link, Switch } from "react-router-dom";
-import {useSelector} from 'react-redux';
-import Dashboard from './Dashboard';
+import React, {useEffect} from 'react';
+import {Link} from "react-router-dom";
+import {useDispatch, useSelector} from 'react-redux';
 import './dashboard.scss';
-import CreateNewGroup from './CreateNewGroup';
-import axios from 'axios';
 import GroupBackendAPIService from "../../services/GroupBackendAPIService";
 
-const API_ENDPOINT = process.env.REACT_APP_ENDPOINT;
-
 const Sidebar = ()=>{
-    const [allGroups, setAllGroups] = useState([]);
-    useEffect(()=>{
+    const dispatch = useDispatch();
+    const {acceptedGroups, invitedGroups} = useSelector(state => state.groupState)
+    useEffect(() => {
         GroupBackendAPIService.getAllGroups().then(({data, success})=>{
             if (success){
-                setAllGroups(data.acceptedGroups);
+                dispatch({
+                    type: 'ADD_GROUPS',
+                    payload: data
+                });
             }
         });
-    },[]);
-
-    useEffect(()=>{
-        const token = JSON.parse(localStorage.getItem('token'));
-        axios.get(`${API_ENDPOINT}/groups/all`, {
-            headers: {
-                authorization: `Bearer ${token}`
-            }
-        }).then((res)=>{
-            if(res.data.success){
-                setAllGroups(res.data.data.acceptedGroups);
-            }
-        })
     },[]);
 
     return(
@@ -75,7 +61,8 @@ const Sidebar = ()=>{
                 </div>
                 <ul className="collection">
                 {
-                    allGroups.map((group)=>{
+                    acceptedGroups.map((group)=>{
+                        console.log(group);
                         return(
                             <li className="collection-item" key={group.id}>
                                 <span>

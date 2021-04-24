@@ -14,7 +14,10 @@ class GroupBackendAPIService {
                     authorization: `Bearer ${this.getToken()}`
                 }
             })
-            return response.data;
+            return {
+                success: true,
+                data: response.data.data,
+            };
         } catch (e) {
             toast.error('Something went wrong while getting all groups!');
             return {
@@ -86,7 +89,10 @@ class GroupBackendAPIService {
                 }
             });
             // console.log(response);
-            return response;
+            return {
+                success: true,
+                data: response.data
+            };
         } catch (e) {
             toast.error('Something went wrong while leaving group!');
             return {

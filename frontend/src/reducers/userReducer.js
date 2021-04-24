@@ -10,8 +10,6 @@ const initState = {
     timezone: '',
     token: '',
   },
-  activeGroups : [],
-  invitedGroups : [],
   usersList: [],
   usersToIdMap: {}
 };
@@ -35,51 +33,6 @@ const userReducer = (state = initState, action)=> {
           ...state.user,
           ...action.payload,
         }
-      }
-    }
-
-    case 'ADD_ACTIVE_GROUPS':{
-      return {
-        ...state,
-        activeGroups : [
-          ...state.activeGroups,
-          ...action.payload
-        ]
-      }
-    }
-
-    case 'ADD_INVITES': {
-      return {
-        ...state,
-        invitedGroups : [
-          ...state.invitedGroups,
-          ...action.payload
-        ]
-      }
-    }
-
-    case 'ACCEPT_GROUP_INVITE': {
-      return {
-        ...state,
-        activeGroups: [
-            ...state.activeGroups,
-            ...action.payload,
-        ],
-        invitedGroups : state.invitedGroups.filter(group => group.id !== action.payload.id)
-      }
-    }
-
-    case 'REMOVE_ACTIVE_GROUPS':{
-      return {
-        ...state,
-        activeGroups : state.activeGroups.filter(group => group.id !== action.payload.id)
-      }
-    }
-
-    case 'REMOVE_INVITES': {
-      return {
-        ...state,
-        invitedGroups : state.invitedGroups.filter(group => group.id !== action.payload.id)
       }
     }
 
