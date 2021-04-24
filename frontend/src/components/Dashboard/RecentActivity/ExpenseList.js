@@ -20,7 +20,7 @@ const ExpenseList = (list)=>{
     },[])
 
 
-    return(
+    return (
         <tbody>
             {
                 expList.map((expense)=>{

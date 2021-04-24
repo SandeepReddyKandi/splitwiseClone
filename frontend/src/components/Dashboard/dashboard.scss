@@ -339,8 +339,11 @@ option {
         padding: 0!important;
         margin: 0!important;
     }
-    .expense-list-col.col {
+    .expense-list-col.col, .recent-activity-col {
         padding: 0!important;
+    }
+    .recent-activity-col .header-col {
+        padding: 10px 0!important;
     }
 }
 
@@ -482,6 +485,39 @@ button {
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+.pagination-cont {
+    display: flex;
+    align-items: center;
+    align-items: center;
+    justify-content: space-between;
+    background: #e0e0e0;
+    select {
+        width: 100px;
+        border: 1px solid;
+        height: 34px;
+    }
+    .pages {
+        span {
+            color: #f8642e;
+            font-size: 16px;
+            border: 1px solid;
+            padding: 4px 10px;
+            margin-right: 10px;
+            cursor: pointer;
+            &:hover {
+                background-color: #f8642e;
+                color: white;
+                border: 1px solid #f8642e;
+            }
+            &.selected {
+                background-color: #f8642e;
+                color: white;
+                border: 1px solid #f8642e;
             }
         }
     }
