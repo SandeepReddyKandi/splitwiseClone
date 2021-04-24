@@ -16,6 +16,7 @@ class CreateNewGroup extends Component {
 		completeUserList: [],
 		selectedPerson: '',
 		userIdToNameMap: {},
+		filterText: '',
 	}
 
 	handleChange = (e) => {
@@ -85,12 +86,26 @@ class CreateNewGroup extends Component {
 		}
 	}
 
+	optionSelected = (user) => {
+		this.setState({
+			...this.state,
+			filterText: `${user.label.toUpperCase()} (${user.email})`,
+			selectedPerson: {
+				name: user.label,
+				id: user.id,
+				email: user.email
+			}
+		});
+
+	}
+
  	addAPersonToGroup = () => {
 		 this.setState((prevState) => {
 			 return {
 				 ...prevState,
 				 userIds: [...prevState.userIds, prevState.selectedPerson],
 				 selectedPerson: '',
+				 filterText: '',
 				 completeUserList: prevState.completeUserList.map(user => {
 					 return {
 						 ...user,
@@ -152,37 +167,44 @@ class CreateNewGroup extends Component {
 						}
 					</div>
 					<div className="row" id="add-person-container">
-						<select
-							value={this.state.selectedPerson ? this.state.selectedPerson.id : null}
-							name={'select-person'}
-							onChange={this.onSelectPersonHandler}
-						>
-							<option>Select a person</option>
-							{
-								this.state.completeUserList.filter(user => !user.isAdded).map(user => {
-									return (
-										<option
-											value={user.id}
-											id={user.email}
-											name={user.label}
-										>
-											{user.label.toUpperCase()} ({user.email})
-										</option>
-									)
-								})
-							}
-						</select>
-						<button
-							className="btn orange darken-3"
-							onClick={this.addAPersonToGroup}
-							disabled={!this.state.selectedPerson}
-						>
-							Add a person
-						</button>
+						<div>
+							<div>
+								<input type="text" id="filterText" name="filterText" value={this.state.filterText} onChange={this.handleChange} placeholder={'Search for your friends'}/>
+							</div>
+							<div>
+								<select
+									value={this.state.selectedPerson ? this.state.selectedPerson.id : null}
+									name={'select-person'}
+									className='users-select'
+									onChange={this.onSelectPersonHandler}
+									size={this.state.completeUserList.filter(user => !user.isAdded && `${user.label.toUpperCase()} (${user.email})`.indexOf(this.state.filterText.toLowerCase()) !== -1 && this.state.filterText).length}
+								>
+									{/*<option>Select a person</option>*/}
+									{
+										this.state.completeUserList.filter(user => !user.isAdded && `${user.label.toUpperCase()} (${user.email})`.indexOf(this.state.filterText.toLowerCase()) !== -1 && this.state.filterText).map(user => {
+											return (
+												<option
+													value={user.id}
+													id={user.email}
+													name={`${user.label.toUpperCase()} (${user.email})`}
+													onClick={() => this.optionSelected(user)}
+												>{user.label.toUpperCase()} ({user.email})</option>
+											)
+										})
+									}
+								</select>
+							</div>
+						</div>
+
 					</div>
 					<div className="row">
 						<button
-							className="btn btn-large green darken-1"
+							className="btn orange darken-3 m-r-10"
+							onClick={this.addAPersonToGroup}
+							disabled={!this.state.selectedPerson}
+						>Add a person</button>
+						<button
+							className="btn  green darken-1"
 							onClick={this.createNewGroup}
 							disabled={!this.state.name || !this.state.userIds.length}
 						>Create Group</button>
