@@ -92,8 +92,6 @@ const User = (props)=>{
                                         ? "Click on 'Update' to save your changes!"
                                         : "Change your profile image"
                                     }
-                                    local: {localImageUrl}
-                                    imageUrl: {user.imageURL}
                                 </span>
                                 <div className="container center-align">
                                     <input
