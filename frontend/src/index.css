@@ -65,3 +65,15 @@ code {
 #groupRightSide{
   margin-left: 20px;
 }
+
+select {
+  background: #67d4bd!important;
+}
+
+select option {
+  padding: 4px;
+}
+
+#filterText {
+  margin: 0!important;
+}

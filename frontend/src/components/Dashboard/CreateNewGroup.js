@@ -177,9 +177,9 @@ class CreateNewGroup extends Component {
 									name={'select-person'}
 									className='users-select'
 									onChange={this.onSelectPersonHandler}
-									size={this.state.completeUserList.filter(user => !user.isAdded && `${user.label.toUpperCase()} (${user.email})`.indexOf(this.state.filterText.toLowerCase()) !== -1 && this.state.filterText).length}
+									size={this.state.completeUserList.filter(user => !user.isAdded && `${user.label.toUpperCase()} (${user.email})`.indexOf(this.state.filterText.toLowerCase()) !== -1 && this.state.filterText).length + 1}
 								>
-									{/*<option>Select a person</option>*/}
+									<option>Select a person</option>
 									{
 										this.state.completeUserList.filter(user => !user.isAdded && `${user.label.toUpperCase()} (${user.email})`.indexOf(this.state.filterText.toLowerCase()) !== -1 && this.state.filterText).map(user => {
 											return (
