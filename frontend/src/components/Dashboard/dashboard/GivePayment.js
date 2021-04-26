@@ -18,7 +18,7 @@ const Give = (give)=>{
                                 <img className="col m2 left responsive-img center-align valign-wrapper" src="https://img.icons8.com/nolan/64/shopping-cart-loaded.png"/>
                                 <div className="col m10 left">
                                     <p className="left-align">{givePayment.name}</p>
-                                    <p className="green-text left-align">you own +${givePayment.totalAmt}</p>
+                                    <p className="green-text left-align">Owes You +${givePayment.totalAmt}</p>
                                 </div>
                             </div>
                             <div className="list-content">
@@ -26,7 +26,7 @@ const Give = (give)=>{
                                 {
                                     givePayment.groups.map((group)=>{
                                         return (
-                                            <li className="collection-item grey lighten-5 grey-text text-lighten-1" key={group.id}>you own {givePayment.name} +${group.amt} for "{group.group}"</li>
+                                            <li className="collection-item grey lighten-5 grey-text text-lighten-1" key={group.id}>{givePayment.name} owes you +${group.amt} for "{group.group}"</li>
                                         )
                                     })
                                 }
