@@ -6,10 +6,11 @@ import userIcon from './img/user_1.png';
 import UserBackendAPIService from "../../../services/UserBackendAPIService";
 import {toast} from "react-toastify";
 
+const PhoneRegex = new RegExp('^[(]?\\d{3}[)]?[(\\s)?.-]\\d{3}[\\s.-]\\d{4}$')
+
 const User = (props)=>{
     const initUser = useSelector(state => {
         const { user } = state.userState;
-        console.log(user);
         return  {
             name: user.name,
             email: user.email,
@@ -27,10 +28,15 @@ const User = (props)=>{
     const fileUploadInputRef = useRef();
 
     const handleChange = (e) => {
+        const [name, value] = [e.target.name, e.target.value];
+        if (name === 'phone' && value && /^[A-Za-z]+$/.test(value.split('').reverse()[0])) {
+            toast.error(`Please add numeric values only`);
+            return;
+        }
         setUser((prevUser) => {
             return {
                 ...prevUser,
-                [e.target.name]: e.target.value,
+                [name]: value,
             }
         })
     }
@@ -42,6 +48,14 @@ const User = (props)=>{
 
     const handleUpdate = (e) => {
         e.preventDefault();
+        const phoneNumberValid = PhoneRegex.test(user.phone);
+        if (!(user.name && user.email && user.phone && user.language )) {
+            toast.error('Please fill in all the fields!');
+            return;
+        } else if (!phoneNumberValid) {
+            toast.error('Please add correct phone number, for example: 111-222-3333!');
+            return;
+        }
         const formData = new FormData();
         Object.keys(user).map(userField => {
             formData.set(userField, user[userField]);

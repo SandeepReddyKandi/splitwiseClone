@@ -8,6 +8,7 @@ import {toast} from "react-toastify";
 import NavigationBarComponent from "./NavigationBarComponent";
 
 const API_ENDPOINT = process.env.REACT_APP_ENDPOINT;
+const PhoneRegex = new RegExp('^[(]?\\d{3}[)]?[(\\s)?.-]\\d{3}[\\s.-]\\d{4}$')
 
 class SignUpComponent extends Component {
   state = {
@@ -26,9 +27,12 @@ class SignUpComponent extends Component {
 
   signUpUser = (e) => {
       e.preventDefault();
-
-      if (!(this.state.name && this.state.email && this.state.phone && this.state.password)) {
-        toast.error('Please fill in all the fields correctly!');
+      const phoneNumberValid = PhoneRegex.test(this.state.phone);
+      if (!(this.state.name && this.state.email && this.state.phone && this.state.password )) {
+        toast.error('Please fill in all the fields!');
+        return;
+      } else if (!phoneNumberValid) {
+        toast.error('Please add correct phone number, for example: 111-222-3333!');
         return;
       }
 
@@ -53,8 +57,13 @@ class SignUpComponent extends Component {
     }
 
     handleChange = (e) => {
+      const [id, value] = [e.target.id, e.target.value];
+      if (id === 'phone' && value && /^[A-Za-z]+$/.test(value.split('').reverse()[0])) {
+        toast.error(`Please add numeric values only`);
+        return;
+      }
       this.setState({
-        [e.target.id]: e.target.value
+        [id]: value
       });
     }
 
