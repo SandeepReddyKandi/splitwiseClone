@@ -1,6 +1,9 @@
+import {gql} from "apollo-server-express";
+
 import userTypedef from './User';
 import expenseTypedef from './Expense';
-import {gql} from "apollo-server-express";
+import groupTypedef from './Group';
+import postTypedef from './Post';
 
 const typeDefs = gql`
     type Query {
@@ -11,6 +14,8 @@ const typeDefs = gql`
     }
     ${userTypedef}
     ${expenseTypedef}
+    ${groupTypedef}
+    ${postTypedef}
 `;
 
 

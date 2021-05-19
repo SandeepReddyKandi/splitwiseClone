@@ -41,7 +41,7 @@ const user = gql`
         balance: String
     }
     
-    input CreateGroupInput {
+    input CreateGroupExpenseInput {
         groupId: String!
         amount: String!
         description: String!
@@ -65,7 +65,7 @@ const user = gql`
         data: AllExpenseData
     }
 
-    type RecentExpenseRepsonse {
+    type RecentExpenseResponse {
         success: Boolean,
         message: String,
         data: RecentExpenseData
@@ -81,13 +81,13 @@ const user = gql`
     extend type Query {
         getAllExpenses(userId: String): AllExpenseResponse
         getBalanceByUser2Id(userId: String, user2Id: String): UserListResponse!
-        getRecentExpenses(userId: String): RecentExpenseRepsonse
+        getRecentExpenses(userId: String): RecentExpenseResponse
         getAllExpensesForGroup(groupId: String): ExpenseListResponse
         getBalanceBetweenAllUsersForGroup(groupId: String): BalanceResponse
     }
 
     extend type Mutation {
-        createGroupExpense(userId: String, groupBody: CreateGroupInput): ExpenseResponse
+        createGroupExpense(userId: String, groupBody: CreateGroupExpenseInput): ExpenseResponse
         settleExpense(userId: String, user2Id: String): ExpenseListResponse
     }
 `

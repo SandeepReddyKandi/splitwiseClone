@@ -10,8 +10,7 @@ function getAllGroupsDto(data) {
     const { id, name } = group;
     return { id, name };
   });
-  const result = { acceptedGroups: acceptedGroupsDto, invitedGroups: invitedGroupsDto };
-  return result;
+  return {acceptedGroups: acceptedGroupsDto, invitedGroups: invitedGroupsDto};
 }
 
 function getBasicGroupDetails(data) {

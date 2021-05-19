@@ -10,9 +10,8 @@ function getNameById(data, id) {
   return value ? value.name : undefined;
 }
 
-export async function getBalanceByUser2Id(userId, user2Id) {
+export async function getBalanceByUser2Id(__, {userId, user2Id}) {
   try {
-    getLogger().info('controllers', 'getBalanceByUser2Id');
     const user = await UserService.getUserById(user2Id);
     if (!user) {
       return { success: false, message: 'User not found' };
@@ -29,20 +28,17 @@ export async function getBalanceByUser2Id(userId, user2Id) {
   }
 }
 
-export async function getAllExpenses(userId) {
+export async function getAllExpenses(__, {userId}) {
   try {
-    getLogger().info('controllers', 'getAllExpenses');
     const { getExpenses, payExpenses } = await ExpenseService.getAllExpensesForUserId(userId);
     const users = await UserService.getAllUsers();
     const allGroups = await GroupService.getAllGroups();
     const data = expensesDtl.getExpenseSummaryDto({ getExpenses, payExpenses, userId, users, allGroups });
-    // publishKafkaMessage({key: req.url, value: response});
     return {
       success: true,
       data,
     };
   } catch (err) {
-    getLogger().error(`Unable to get all expenses. Err. ${JSON.stringify(err)}`);
     return {
       success: false,
       message: `Unable to get all expenses. Err. ${JSON.stringify(err)}`
@@ -50,7 +46,7 @@ export async function getAllExpenses(userId) {
   }
 }
 
-export async function getRecentExpenses(userId) {
+export async function getRecentExpenses(__, {userId}) {
   try {
     const { acceptedGroups } = await GroupService.getAllGroupsByUserId(userId);
     const groups = await GroupService.getAllGroups();
@@ -74,7 +70,7 @@ export async function getRecentExpenses(userId) {
   }
 }
 
-export async function createGroupExpense(userId, groupBody) {
+export async function createGroupExpense(__, {userId, groupBody}) {
   try {
     const { groupId, amount, description } = groupBody;
     const group = await GroupService.getGroupById(groupId);
@@ -88,7 +84,6 @@ export async function createGroupExpense(userId, groupBody) {
     const { currency } = group;
     const expenses = await ExpenseService.createGroupExpense({ userId, userIds, groupId, amount, description, currency });
     const data = expensesDtl.getBasicExpensesDetailsDto(expenses);
-    // publishKafkaMessage({key: req.url, value: response});
     return {
       success: true,
       data,
@@ -101,9 +96,8 @@ export async function createGroupExpense(userId, groupBody) {
   }
 }
 
-export async function getAllExpensesForGroup(groupId) {
+export async function getAllExpensesForGroup(__, {groupId}) {
   try {
-    getLogger().info('controllers', 'getAllExpensesForGroup', 'params', JSON.stringify(req.params));
     const data = await ExpenseService.getAllExpensesForGroup(groupId);
     return {
       success: true,
@@ -117,7 +111,7 @@ export async function getAllExpensesForGroup(groupId) {
   }
 }
 
-export async function getBalanceBetweenAllUsersForGroup(groupId) {
+export async function getBalanceBetweenAllUsersForGroup(__, {groupId}) {
   try {
     const users = await GroupService.getAllAcceptedUsersByGroupId(groupId);
     const balances = [];
@@ -145,9 +139,8 @@ export async function getBalanceBetweenAllUsersForGroup(groupId) {
 }
 
 
-export async function settleExpense(userId, user2Id) {
+export async function settleExpense(__, {userId, user2Id}) {
   try {
-    getLogger().info('controllers', 'settleExpense', 'params', JSON.stringify(req.params));
     const updatedDetails = await ExpenseService.settleAllBalancesBetweenUsers(userId, user2Id);
     return {
       success: true,
