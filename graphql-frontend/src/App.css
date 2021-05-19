@@ -1,0 +1,17 @@
+.Toastify__toast-container--top-right {
+    bottom: 4em!important;
+    top: unset!important;
+    right: 1em;
+}
+
+td, th {
+    padding: 0 !important;
+}
+
+.m-r-10 {
+    margin-right: 12px;
+}
+
+select.users-select {
+    height: auto!important;
+}
