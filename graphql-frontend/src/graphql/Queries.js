@@ -75,4 +75,35 @@ export const GET_ALL_EXPENSES = gql`
     }
 `;
 
+export const GET_GROUP_INFO = gql`
+    query($groupId: String!) {
+        getGroupInfo(groupId: $groupId) {
+            success
+            message
+            data {
+                id
+                name
+                acceptedUsers
+                invitedUsers
+                currency
+                imageUrl
+            }
+        }
+    }
+`;
+
+export const GET_BALANCE_BETWEEN_USERS_FOR_GROUP = gql`
+    query($groupId: String!) {
+        getBalanceBetweenAllUsersForGroup(groupId: $groupId) {
+            success
+            message
+            data {
+                byUserName
+                toUserName
+                balance
+            }
+        }
+    }
+`;
+
 

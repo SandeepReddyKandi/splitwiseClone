@@ -14,9 +14,21 @@ const store = createStore(
   composeWithDevTools()
 );
 
+const defaultOptions = {
+    watchQuery: {
+        fetchPolicy: 'no-cache',
+        errorPolicy: 'ignore',
+    },
+    query: {
+        fetchPolicy: 'no-cache',
+        errorPolicy: 'all',
+    },
+}
+
 const client = new ApolloClient({
     cache: new InMemoryCache(),
-    uri: process.env.REACT_APP_GRAPHQL_API_URI
+    uri: process.env.REACT_APP_GRAPHQL_API_URI,
+    defaultOptions,
 })
 
 ReactDOM.render(

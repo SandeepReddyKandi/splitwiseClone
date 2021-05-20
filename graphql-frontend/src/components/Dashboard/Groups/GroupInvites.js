@@ -1,35 +1,49 @@
-import React, {useState, useEffect} from 'react';
-import {useSelector, connect} from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {connect} from 'react-redux';
 import '../dashboard.scss'
-import axios from 'axios';
 import {toast} from "react-toastify";
 import GroupBackendAPIService from "../../../services/GroupBackendAPIService";
 import SearchComponent from "./SearchComponent";
+import {useLazyQuery} from "@apollo/client";
+import {GET_ALL_GROUPS} from "../../../graphql/Queries";
 
 const Invites = (props)=>{
     const [invitedGroups, setInvitedGroups] = useState(props.invitedGroups || []);
     const [acceptedGroups, setAcceptedGroups] = useState(props.acceptedGroups || []);
+    const [getAllGroups, {loading: allGroupsLoading, data: allGroupsData}] = useLazyQuery(GET_ALL_GROUPS);
+    console.log('allGroupsData', allGroupsLoading, allGroupsData);
+    useEffect(() => {
+        debugger;
+        const userId = localStorage.getItem('userId') ? JSON.parse(localStorage.getItem('userId')) : null;
+        getAllGroups({
+            variables: {
+                userId,
+            }
+        });
+    },[]);
 
     useEffect(() => {
-        GroupBackendAPIService.getAllGroups().then(({data, success})=>{
-            if (success) {
-                props.addActiveGroups(data.acceptedGroups);
-                props.addInvites(data.invitedGroups);
-                setInvitedGroups(data.invitedGroups.map(group => {
+        if (!allGroupsLoading || allGroupsData) {
+            if (allGroupsData && allGroupsData.getAllGroups.success) {
+                props.addActiveGroups(allGroupsData.getAllGroups.data.acceptedGroups);
+                props.addInvites(allGroupsData.getAllGroups.data.invitedGroups);
+                setInvitedGroups(allGroupsData.getAllGroups.data.invitedGroups.map(group => {
                     return {
                         ...group,
                         show: true,
                     }
                 }));
-                setAcceptedGroups(data.acceptedGroups.map(group => {
+                setAcceptedGroups(allGroupsData.getAllGroups.data.acceptedGroups.map(group => {
                     return {
                         ...group,
                         show: true,
                     }
                 }))
+            } else if (allGroupsData && !allGroupsData.getAllGroups.success) {
+                toast.error(allGroupsData.getAllGroups.message);
             }
-        })
-    },[]);
+        }
+    }, [allGroupsLoading]);
 
     const acceptInvitation = (invite)=>{
         GroupBackendAPIService.acceptInvitation(invite).then(({data, success})=>{

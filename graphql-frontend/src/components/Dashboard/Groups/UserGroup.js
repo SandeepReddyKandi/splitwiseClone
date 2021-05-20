@@ -8,6 +8,13 @@ import ExpenseBackendAPIService from "../../../services/ExpenseBackendAPIService
 import GroupBackendAPIService from "../../../services/GroupBackendAPIService";
 import UserBackendAPIService from '../../../services/UserBackendAPIService';
 import {useDispatch, useSelector} from "react-redux";
+import {useLazyQuery} from "@apollo/client";
+import {
+    GET_ALL_EXPENSES,
+    GET_ALL_GROUPS,
+    GET_BALANCE_BETWEEN_USERS_FOR_GROUP,
+    GET_GROUP_INFO
+} from "../../../graphql/Queries";
 
 const UserGroups = (props)=>{
     const [group, setGroup] = useState({
@@ -19,6 +26,9 @@ const UserGroups = (props)=>{
     const [remainingUsers, getHiddeUsers] = useState('');
 
     const dispatch = useDispatch();
+    const [getGroupInfo, {loading: groupInfoLoading, data: getGroupInfoData}] = useLazyQuery(GET_GROUP_INFO);
+    const [getAllExpenses, {loading: expenseLoading, data: allExpenseData}] = useLazyQuery(GET_ALL_EXPENSES);
+    const [getBalances, {loading: balancesLoading, data: getBalancesData}] = useLazyQuery(GET_BALANCE_BETWEEN_USERS_FOR_GROUP);
 
     const { groupExpensesRedux } = useSelector(state => {
         return {
@@ -31,40 +41,65 @@ const UserGroups = (props)=>{
     }, [])
 
     useEffect(()=>{
+        const userId = localStorage.getItem('userId') ? JSON.parse(localStorage.getItem('userId')) : null;
+
         document.querySelector("#extraInfo").classList.add('vanish');
         document.querySelector("#openDetailsLink").classList.remove('vanish');
         document.querySelector("#closeDetailsLink").classList.add('vanish');
 
-        GroupBackendAPIService.getGroupInfo(groupId).then(({data, success}) => {
-            setGroup(data);
-        });
-
-        // getting all the expenses
-        ExpenseBackendAPIService.getAllExpensesForGroupId(groupId).then(({data, success})=>{
-            if (success) {
-                updateGroupExpense(data);
+        getGroupInfo({
+            variables: {
+                groupId,
             }
         });
 
-        ExpenseBackendAPIService.getBalanceOfEachUserInGoupId(groupId).then(({data, success})=>{
-            if(success){
-                console.log('balance of each user : ',data);
-                setAllUserExpenses(data);
-                getShowUsers(data.splice(0, 1));
-                getHiddeUsers(data.splice(1, data.length));
+        getAllExpenses({
+            variables: {
+                userId,
             }
         });
+
+        getBalances({
+            variables: {
+                groupId
+            }
+        })
+
     }, [groupId]);
 
-    const updateGroupExpense = (expenses) => {
-        dispatch({
-            type: 'ADD_GROUP_EXPENSES',
-            payload: {
-                groupId,
-                expenses,
+    useEffect(() => {
+        if (!groupInfoLoading) {
+            if (getGroupInfoData && getGroupInfoData.getGroupInfo.success) {
+                setGroup(getGroupInfoData.getGroupInfo.data)
             }
-        });
-    }
+        }
+    }, [groupInfoLoading]);
+
+    useEffect(() => {
+        if (!expenseLoading) {
+            if (allExpenseData && allExpenseData.getAllExpenses.success) {
+                dispatch({
+                    type: 'ADD_GROUP_EXPENSES',
+                    payload: {
+                        groupId,
+                        expenses: allExpenseData.getAllExpenses.data,
+                    }
+                });
+            }
+        }
+    }, [expenseLoading]);
+
+    useEffect(() => {
+        if (!balancesLoading) {
+            if (getBalancesData && getBalancesData.getBalanceBetweenAllUsersForGroup.success) {
+                let balanceData = [...getBalancesData.getBalanceBetweenAllUsersForGroup.data];
+                console.log('balance of each user : ',balanceData);
+                setAllUserExpenses(balanceData);
+                getShowUsers(balanceData.splice(0, 1));
+                getHiddeUsers(balanceData.splice(1, balanceData.length));
+            }
+        }
+    }, [balancesLoading]);
 
     return (
         <div className="container user-groups">

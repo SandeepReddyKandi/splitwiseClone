@@ -45,7 +45,7 @@ const group = gql`
     }
 
     extend type Query {
-        getGroupInfo: GroupResponse!
+        getGroupInfo(groupId: String): GroupResponse!
         getAllGroups(userId: String): AllGroupResponse
     }
 
