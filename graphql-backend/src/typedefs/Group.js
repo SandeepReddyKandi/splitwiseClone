@@ -32,12 +32,6 @@ const group = gql`
         data: Group
     }
 
-    type GroupListResponse {
-        success: Boolean!
-        message: String
-        data: [Group]
-    }
-
     type AllGroupResponse {
         success: Boolean!
         message: String

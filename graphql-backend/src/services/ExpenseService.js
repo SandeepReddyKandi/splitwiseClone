@@ -47,6 +47,7 @@ class ExpenseService {
         });
         return result;
     }
+
     static async getAllExpensesForUserId(userId) {
         const getExpenses = await Expense.find({ byUser: userId, settledAt: null });
         const payExpenses = await Expense.find( { toUser: userId, settledAt: null });

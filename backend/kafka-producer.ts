@@ -8,7 +8,8 @@ const brokers = ["localhost:9092"]
 const topic = "my-kafka-topic"
 
 const kafka = new Kafka({ clientId, brokers })
-const producer = kafka.producer();
+// const producer = kafka.producer();
+const producer: any = {};
 
 const produce = async ({key, value}) => {
     await producer.connect()
@@ -29,9 +30,9 @@ const produce = async ({key, value}) => {
 }
 
 const publishKafkaMessage = ({key, value}) => {
-    produce({key, value}).catch((err) => {
-        console.error("Error in producer: ", err)
-    })
+    // produce({key, value}).catch((err) => {
+    //     console.error("Error in producer: ", err)
+    // })
 }
 
 export default publishKafkaMessage;

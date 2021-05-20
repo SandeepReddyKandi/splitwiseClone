@@ -10,7 +10,7 @@ import UserBackendAPIService from '../../../services/UserBackendAPIService';
 import {useDispatch, useSelector} from "react-redux";
 import {useLazyQuery} from "@apollo/client";
 import {
-    GET_ALL_EXPENSES,
+    GET_ALL_EXPENSES, GET_ALL_EXPENSES_FOR_GROUP,
     GET_ALL_GROUPS,
     GET_BALANCE_BETWEEN_USERS_FOR_GROUP,
     GET_GROUP_INFO
@@ -27,7 +27,7 @@ const UserGroups = (props)=>{
 
     const dispatch = useDispatch();
     const [getGroupInfo, {loading: groupInfoLoading, data: getGroupInfoData}] = useLazyQuery(GET_GROUP_INFO);
-    const [getAllExpenses, {loading: expenseLoading, data: allExpenseData}] = useLazyQuery(GET_ALL_EXPENSES);
+    const [getAllExpensesForGroup, {loading: expenseForGroupLoading, data: allExpenseForGroupData}] = useLazyQuery(GET_ALL_EXPENSES_FOR_GROUP);
     const [getBalances, {loading: balancesLoading, data: getBalancesData}] = useLazyQuery(GET_BALANCE_BETWEEN_USERS_FOR_GROUP);
 
     const { groupExpensesRedux } = useSelector(state => {
@@ -38,7 +38,7 @@ const UserGroups = (props)=>{
 
     useEffect(() => {
         setGroupId(props.match.params.id);
-    }, [])
+    }, [props.match.params.id])
 
     useEffect(()=>{
         const userId = localStorage.getItem('userId') ? JSON.parse(localStorage.getItem('userId')) : null;
@@ -53,7 +53,7 @@ const UserGroups = (props)=>{
             }
         });
 
-        getAllExpenses({
+        getAllExpensesForGroup({
             variables: {
                 userId,
             }
@@ -76,18 +76,18 @@ const UserGroups = (props)=>{
     }, [groupInfoLoading]);
 
     useEffect(() => {
-        if (!expenseLoading) {
-            if (allExpenseData && allExpenseData.getAllExpenses.success) {
+        if (!expenseForGroupLoading) {
+            if (allExpenseForGroupData && allExpenseForGroupData.getAllExpenses.success) {
                 dispatch({
                     type: 'ADD_GROUP_EXPENSES',
                     payload: {
                         groupId,
-                        expenses: allExpenseData.getAllExpenses.data,
+                        expenses: allExpenseForGroupData.getAllExpenses.data,
                     }
                 });
             }
         }
-    }, [expenseLoading]);
+    }, [expenseForGroupLoading]);
 
     useEffect(() => {
         if (!balancesLoading) {

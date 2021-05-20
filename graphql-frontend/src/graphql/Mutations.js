@@ -57,6 +57,7 @@ export const CREATE_GROUP_EXPENSE = gql`
     }
 
 `
+
 export const CREATE_GROUP = gql`
     mutation($userId: String, $data: CreateGroupInput) {
         createGroup(userId: $userId, data: $data) {
@@ -75,3 +76,19 @@ export const CREATE_GROUP = gql`
 
 `
 
+export const ACCEPT_INVITE = gql`
+    mutation($userId: String, $groupId: String) {
+        acceptGroupInvite(userId: $userId, groupId: $groupId) {
+            success
+            message
+            data {
+                id
+                name
+                acceptedUsers
+                invitedUsers
+                currency
+                imageUrl
+            }
+        }
+    }
+`

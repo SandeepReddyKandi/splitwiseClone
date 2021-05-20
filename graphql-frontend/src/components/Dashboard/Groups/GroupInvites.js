@@ -4,16 +4,17 @@ import '../dashboard.scss'
 import {toast} from "react-toastify";
 import GroupBackendAPIService from "../../../services/GroupBackendAPIService";
 import SearchComponent from "./SearchComponent";
-import {useLazyQuery} from "@apollo/client";
+import {useLazyQuery, useMutation} from "@apollo/client";
 import {GET_ALL_GROUPS} from "../../../graphql/Queries";
+import {ACCEPT_INVITE} from "../../../graphql/Mutations";
 
 const Invites = (props)=>{
     const [invitedGroups, setInvitedGroups] = useState(props.invitedGroups || []);
     const [acceptedGroups, setAcceptedGroups] = useState(props.acceptedGroups || []);
     const [getAllGroups, {loading: allGroupsLoading, data: allGroupsData}] = useLazyQuery(GET_ALL_GROUPS);
+    const [acceptInvite, {loading: acceptInviteLoading, data: acceptInviteData}] = useMutation(ACCEPT_INVITE);
     console.log('allGroupsData', allGroupsLoading, allGroupsData);
     useEffect(() => {
-        debugger;
         const userId = localStorage.getItem('userId') ? JSON.parse(localStorage.getItem('userId')) : null;
         getAllGroups({
             variables: {
@@ -45,9 +46,16 @@ const Invites = (props)=>{
         }
     }, [allGroupsLoading]);
 
-    const acceptInvitation = (invite)=>{
-        GroupBackendAPIService.acceptInvitation(invite).then(({data, success})=>{
-            if(success){
+    const acceptInvitation = (invitedGroupId) => {
+        const userId = localStorage.getItem('userId') ? JSON.parse(localStorage.getItem('userId')) : null;
+        acceptInvite({
+            variables: {
+                userId: '',
+                groupId: invitedGroupId,
+            }
+        }).then(({data}) => {
+            console.log(data.acceptGroupInvite);
+            if(data.acceptGroupInvite.success){
                 toast.success(`Invite for the ${invite.name} accepted successfully!`)
                 props.acceptGroupInvite([invite]);
                 setInvitedGroups(invitedGroups.filter(group => group.id !== invite.id))
@@ -56,7 +64,6 @@ const Invites = (props)=>{
                 toast.error(data.message);
             }
         })
-
     }
 
     const leaveGroup = (invite, isInvitedGroup)=>{
@@ -116,7 +123,7 @@ const Invites = (props)=>{
                                             <td className="left-align">
                                                 <a
                                                     className="btn-floating waves-light green add"
-                                                    onClick={() => acceptInvitation(invite)}
+                                                    onClick={() => acceptInvitation(invite.id)}
                                                 >
                                                     <i className="material-icons">add</i>
                                                 </a>

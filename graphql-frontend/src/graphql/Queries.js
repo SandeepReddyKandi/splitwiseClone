@@ -39,6 +39,47 @@ export const GET_USER_DETAIL = gql`
     }
 `;
 
+/*  ALL THE EXPENSE RELATED QUERIES */
+
+export const GET_ALL_EXPENSES = gql`
+    query($userId: String!) {
+        getAllExpenses(userId: $userId) {
+            success
+            message
+            data {
+                totalcost
+                pay
+                recieve
+                recieveExpenses
+                getExpenses
+            }
+        }
+    }
+`;
+
+export const GET_ALL_EXPENSES_FOR_GROUP = gql`
+    query($groupId: String!) {
+        getAllExpensesForGroup(groupId: $groupId) {
+            success
+            message
+            data {
+                id
+                byUser
+                toUser
+                groupId
+                amount
+                description
+                settledAt
+                currency
+            }
+        }
+    }
+`;
+
+
+/*  ALL THE GROUP RELATED QUERIES */
+
+
 export const GET_ALL_GROUPS = gql`
     query($userId: String!) {
         getAllGroups(userId: $userId) {
@@ -58,22 +99,6 @@ export const GET_ALL_GROUPS = gql`
     }
 `;
 
-
-export const GET_ALL_EXPENSES = gql`
-    query($userId: String!) {
-        getAllExpenses(userId: $userId) {
-            success
-            message
-            data {
-                totalcost
-                pay
-                recieve
-                recieveExpenses
-                getExpenses
-            }
-        }
-    }
-`;
 
 export const GET_GROUP_INFO = gql`
     query($groupId: String!) {
