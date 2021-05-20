@@ -73,8 +73,9 @@ export async function getRecentExpenses(__, {userId}) {
 }
 
 export async function createGroupExpense(__, {userId, groupBody}) {
+  const { groupId, amount, description } = groupBody;
+  console.log('GROUP IS', groupId);
   try {
-    const { groupId, amount, description } = groupBody;
     const group = await GroupService.getGroupById(groupId);
     if (!group || !group.acceptedUsers.length){
      return {
@@ -82,15 +83,17 @@ export async function createGroupExpense(__, {userId, groupBody}) {
        message: 'Group not found'
      }
     }
-    const userIds = group.acceptedUsers;
+    const userIds = group.acceptedUsers.filter(u => u !== userId);
     const { currency } = group;
     const expenses = await ExpenseService.createGroupExpense({ userId, userIds, groupId, amount, description, currency });
+    console.log('NEW EXPENSE IS', expenses)
     const data = expensesDtl.getBasicExpensesDetailsDto(expenses);
     return {
       success: true,
       data,
     };
   } catch (err) {
+    console.log('EXPENSE CONTROLLER error is', err);
     return {
       success: false,
       message: `Unable to create expense. Err. ${JSON.stringify(err)}`

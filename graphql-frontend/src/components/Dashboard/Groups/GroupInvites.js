@@ -46,12 +46,12 @@ const Invites = (props)=>{
         }
     }, [allGroupsLoading]);
 
-    const acceptInvitation = (invitedGroupId) => {
+    const acceptInvitation = (invite) => {
         const userId = localStorage.getItem('userId') ? JSON.parse(localStorage.getItem('userId')) : null;
         acceptInvite({
             variables: {
-                userId: '',
-                groupId: invitedGroupId,
+                userId,
+                groupId: invite.id,
             }
         }).then(({data}) => {
             console.log(data.acceptGroupInvite);
@@ -61,7 +61,7 @@ const Invites = (props)=>{
                 setInvitedGroups(invitedGroups.filter(group => group.id !== invite.id))
                 setAcceptedGroups([...acceptedGroups, invite]);
             } else {
-                toast.error(data.message);
+                toast.error(data.acceptGroupInvite.message);
             }
         })
     }
@@ -123,7 +123,7 @@ const Invites = (props)=>{
                                             <td className="left-align">
                                                 <a
                                                     className="btn-floating waves-light green add"
-                                                    onClick={() => acceptInvitation(invite.id)}
+                                                    onClick={() => acceptInvitation(invite)}
                                                 >
                                                     <i className="material-icons">add</i>
                                                 </a>

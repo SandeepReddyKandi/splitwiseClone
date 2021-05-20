@@ -5,12 +5,11 @@ function getNameById(data, id) {
   const value = data.find(entry => {
     return entry.id == id || entry._id == id
   });
-  console.log('VALUE IS', value, data, id);
   return value.name;
 }
 
 function getBasicExpensesDetailsDto(expenses) {
-  if (!expenses || expenses.length) return expenses;
+  if (!expenses || !expenses.length) return expenses;
   const result = _.map(expenses, (expense) => {
     const { id, byUser, toUser, createdAt, settledAt, description, amount } = expense;
     return { id, byUser, toUser, createdAt, settledAt, description, amount };
@@ -78,6 +77,7 @@ function getExpenseSummaryDto(data) {
         recieve += totalAmount;
         myObject.groups = tempGroups;
         doneRecieveUsers.push(getExpenses[i].toUser);
+        console.log('RECEIVE', myObject);
         recieveExpensesFinal.push(myObject);
       }
     }
@@ -112,6 +112,7 @@ function getExpenseSummaryDto(data) {
         pay += totalAmount;
         myObject.groups = tempGroups;
         donePayUsers.push(payExpenses[i].byUser);
+        console.log('PAY', myObject);
         payExpensesFinal.push(myObject);
       }
     }

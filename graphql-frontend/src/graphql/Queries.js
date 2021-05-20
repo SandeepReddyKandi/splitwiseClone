@@ -50,8 +50,26 @@ export const GET_ALL_EXPENSES = gql`
                 totalcost
                 pay
                 recieve
-                recieveExpenses
-                getExpenses
+                recieveExpenses {
+                    name
+                    id
+                    totalAmt
+                    groups {
+                        id
+                        amt
+                        group
+                    }
+                }
+                getExpenses {
+                    name
+                    id
+                    totalAmt
+                    groups {
+                        id
+                        amt
+                        group
+                    }
+                }
             }
         }
     }

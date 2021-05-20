@@ -4,12 +4,12 @@ import { loginUser } from '../controllers/user_controller';
 const user = gql`
     type Expense {
         id: String
-        byUser: String!
-        toUser: String!
-        groupId: String!
-        amount: Float!
-        description: String!
-        settledAt: String!
+        byUser: String
+        toUser: String
+        groupId: String
+        amount: Float
+        description: String
+        settledAt: String
         currency: String
     }
 #
@@ -22,13 +22,25 @@ const user = gql`
 #        settledAt: String!
 #        currency: String
 #    }
+    type GET_OR_PAY_EXPENSES_GROUP {
+        id: String
+        amt: String
+        group: String
+    }
+
+    type GET_OR_PAY_EXPENSES {
+        name: String
+        id: String
+        totalAmt: String
+        groups: [GET_OR_PAY_EXPENSES_GROUP]
+    }
 
     type AllExpenseData {
         totalcost: String
         pay: String
         recieve: String
-        recieveExpenses: [String]
-        getExpenses: [String]
+        recieveExpenses: [GET_OR_PAY_EXPENSES]
+        getExpenses: [GET_OR_PAY_EXPENSES]
     }
 
     type RecentExpenseData {
@@ -58,7 +70,7 @@ const user = gql`
     type ExpenseResponse {
         success: Boolean,
         message: String,
-        data: Expense
+        data: [Expense]
     }
 
     type BalanceResponse {
@@ -84,7 +96,6 @@ const user = gql`
         message: String,
         data: [Expense]
     }
-
 
     extend type Query {
         getAllExpenses(userId: String): AllExpenseResponse

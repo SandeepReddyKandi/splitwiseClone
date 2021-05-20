@@ -4,14 +4,10 @@ import '../dashboard.scss';
 import Modal from './Modal';
 import './Modal.css'
 import "materialize-css/dist/css/materialize.min.css";
-import ExpenseBackendAPIService from "../../../services/ExpenseBackendAPIService";
-import GroupBackendAPIService from "../../../services/GroupBackendAPIService";
-import UserBackendAPIService from '../../../services/UserBackendAPIService';
 import {useDispatch, useSelector} from "react-redux";
 import {useLazyQuery} from "@apollo/client";
 import {
-    GET_ALL_EXPENSES, GET_ALL_EXPENSES_FOR_GROUP,
-    GET_ALL_GROUPS,
+    GET_ALL_EXPENSES_FOR_GROUP,
     GET_BALANCE_BETWEEN_USERS_FOR_GROUP,
     GET_GROUP_INFO
 } from "../../../graphql/Queries";
@@ -55,7 +51,7 @@ const UserGroups = (props)=>{
 
         getAllExpensesForGroup({
             variables: {
-                userId,
+                groupId,
             }
         });
 
@@ -77,12 +73,12 @@ const UserGroups = (props)=>{
 
     useEffect(() => {
         if (!expenseForGroupLoading) {
-            if (allExpenseForGroupData && allExpenseForGroupData.getAllExpenses.success) {
+            if (allExpenseForGroupData && allExpenseForGroupData.getAllExpensesForGroup.success) {
                 dispatch({
                     type: 'ADD_GROUP_EXPENSES',
                     payload: {
                         groupId,
-                        expenses: allExpenseForGroupData.getAllExpenses.data,
+                        expenses: allExpenseForGroupData.getAllExpensesForGroup.data,
                     }
                 });
             }
@@ -93,7 +89,6 @@ const UserGroups = (props)=>{
         if (!balancesLoading) {
             if (getBalancesData && getBalancesData.getBalanceBetweenAllUsersForGroup.success) {
                 let balanceData = [...getBalancesData.getBalanceBetweenAllUsersForGroup.data];
-                console.log('balance of each user : ',balanceData);
                 setAllUserExpenses(balanceData);
                 getShowUsers(balanceData.splice(0, 1));
                 getHiddeUsers(balanceData.splice(1, balanceData.length));

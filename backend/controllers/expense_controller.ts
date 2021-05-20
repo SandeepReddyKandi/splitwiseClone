@@ -75,14 +75,16 @@ async function createGroupExpense(req, res, next) {
     const { groupId, amount, description } = req.body;
     const group = await GroupService.getGroupById(groupId);
     if (!group || !group.acceptedUsers.length) return res.send(genericDTL.getResponseDto('', 'Group not found'));
-    const userIds = group.acceptedUsers;
+    const userIds = group.acceptedUsers.filter(u => u !== userId);
     const { currency } = group;
     const expenses = await ExpenseService.createGroupExpense({ userId, userIds, groupId, amount, description, currency });
+    console.log('NEW EXPENSE IS', expenses)
     const resData = expensesDtl.getBasicExpensesDetailsDto(expenses);
     const response = genericDTL.getResponseDto(resData);
     publishKafkaMessage({key: req.url, value: response});
     return res.send(response);
   } catch (err) {
+    console.log('error is0,', err)
     getLogger().error(`Unable to create expense. Err. ${JSON.stringify(err)}`);
     return next(err);
   }
