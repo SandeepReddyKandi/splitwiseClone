@@ -7,7 +7,7 @@ const user = gql`
         name: String!
         email: String!
         password: String
-        token: String!
+        token: String
         language: String
         phone: String
         timezone: String
@@ -42,13 +42,13 @@ const user = gql`
     
     extend type Query {
         users: UserListResponse!
+        getUserDetails(userId: String): Response
     }
 
     extend type Mutation {
         login(email: String, password: String): Response
         updateDetails(userId: String, userDetails: UpdateUserInput): Response
         signUpUser(userBody: CreateUserInput): Response
-        getUserDetails(userId: String): Response
     }
 `
 

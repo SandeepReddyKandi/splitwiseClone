@@ -2,13 +2,13 @@ import {loginUser, signUpUser, updateUserDetails, getUserDetails, getAllUsers} f
 
 const userResolver = {
     Query: {
-        users: getAllUsers
+        users: getAllUsers,
+        getUserDetails: getUserDetails,
     },
     Mutation: {
         login: loginUser,
         updateDetails: updateUserDetails,
         signUpUser: signUpUser,
-        getUserDetails: getUserDetails,
     }
 }
 

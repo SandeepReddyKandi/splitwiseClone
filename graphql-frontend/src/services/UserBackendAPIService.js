@@ -1,10 +1,12 @@
 import axios from "axios";
 import {toast} from "react-toastify";
+import {useMutation} from "@apollo/client";
 
 const API_ENDPOINT = `${process.env.REACT_APP_ENDPOINT}/user`;
 
 class UserBackendAPIService {
     static getToken = () => localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')) : null;
+    static getUserId = () => localStorage.getItem('userId') ? JSON.parse(localStorage.getItem('userId')) : null;
 
     static async getAllUsers() {
         const url = `${API_ENDPOINT}/all`;
@@ -103,7 +105,6 @@ class UserBackendAPIService {
                     success: false
                 }
             }
-            localStorage.setItem('token', JSON.stringify(data.data.token));
             return {
                 data: {
                     ...data.data,

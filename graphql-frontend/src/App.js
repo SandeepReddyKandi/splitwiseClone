@@ -11,38 +11,51 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import UserBackendAPIService from "./services/UserBackendAPIService";
 import {connect} from "react-redux";
 import "./App.css";
-import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
+import {useLazyQuery} from "@apollo/client";
+import {GET_USER_DETAIL, GET_USERS} from "./graphql/Queries";
 
 function App(props) {
+    const [getAllUsers, {loading: getUsersLoading, data: allUsersRes}] = useLazyQuery(GET_USERS);
+    const [getUserDetails, { loading: userDetailLoading, data: usersResData }] = useLazyQuery(GET_USER_DETAIL);
     useEffect(() => {
         // Read the token from localstorage
         initReduxStore();
     }, []);
 
+    useEffect(() => {
+       if (!userDetailLoading) {
+           if (usersResData && usersResData.getUserDetails.success) {
+               props.updateUserData(usersResData.getUserDetails.data);
+               getAllUsers();
+               console.log(`Already Logged In As ${usersResData.getUserDetails.data.name}`);
+           } else if (usersResData && !usersResData.getUserDetails.success){
+               console.log('Please Login Or Signup');
+           }
+       }
+    }, [userDetailLoading]);
+
+    useEffect(() => {
+        if (!getUsersLoading) {
+            if (allUsersRes && allUsersRes.users.success) {
+                props.addUsersList(allUsersRes.users.data);
+            }
+        }
+    }, [getUsersLoading]);
+
     const initReduxStore = async () => {
         const token = localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')) : null;
+        const userId = localStorage.getItem('userId') ? JSON.parse(localStorage.getItem('userId')) : null;
         if (token) {
-            const user = await UserBackendAPIService.getUserDetails();
-            if (user.success) {
-                props.updateUserData(user.data);
-                const allUsersRes = await UserBackendAPIService.getAllUsers();
-                console.log(allUsersRes)
-                props.addUsersList(allUsersRes);
-                console.log(`Already Logged In As ${user.data.name}`);
-            } else {
-                console.log('Please Login Or Signup');
-            }
+            getUserDetails({
+                variables: {
+                    userId,
+                }
+            });
         }
     }
 
-    const client = new ApolloClient({
-        cache: new InMemoryCache(),
-        uri: process.env.REACT_APP_GRAPHQL_API_URI
-    })
-
     return (
         <BrowserRouter>
-            <ApolloProvider client={client}>
                 <div className="App">
                     <ToastContainer/>
                     <Route exact path="/" component={HomeComponent}/>
@@ -63,7 +76,6 @@ function App(props) {
                         )
                     }}/>
                 </div>
-            </ApolloProvider>
         </BrowserRouter>
     );
 }

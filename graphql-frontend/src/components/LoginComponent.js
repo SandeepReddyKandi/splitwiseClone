@@ -6,9 +6,10 @@ import {useDispatch} from "react-redux";
 import {toast} from "react-toastify";
 import NavigationBarComponent from "./NavigationBarComponent";
 import UserBackendAPIService from "../services/UserBackendAPIService";
-import {useMutation} from "@apollo/client";
+import {useLazyQuery, useMutation} from "@apollo/client";
 import {LOGIN_USER} from "../graphql/Mutations";
 import LoadingComponent from "./LoadingComponent";
+import {GET_USER_DETAIL} from "../graphql/Queries";
 
 const LoginComponent = () => {
 	const [state, setState] = useState({
@@ -19,22 +20,32 @@ const LoginComponent = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 	let [loginUser, {loading}] = useMutation(LOGIN_USER)
-
-	const getRedirections = async () => {
-		const { data, success } = await UserBackendAPIService.getUserDetails();
-		if (success) {
-			dispatch({
-				type: "ADD_USER_DATA",
-				payload: data
-			});
-			localStorage.setItem('token', JSON.stringify(data.token));
-			history.push('/user/home');
-		}
-	}
+	const [getUserDetails, { loading: userDetailLoading, data: usersResData }] = useLazyQuery(GET_USER_DETAIL);
 
 	useEffect(() => {
-		getRedirections();
+		const token = localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')) : null;
+		const userId = localStorage.getItem('userId') ? JSON.parse(localStorage.getItem('userId')) : null;
+		if (token) {
+			getUserDetails({
+				variables: {
+					userId,
+				}
+			});
+		}
 	}, [])
+
+	useEffect(() => {
+		console.log('userDetailLoading', userDetailLoading)
+		if (!userDetailLoading) {
+			if (usersResData && usersResData.getUserDetails.success) {
+				dispatch({
+					type: "ADD_USER_DATA",
+					payload: usersResData.getUserDetails.data
+				});
+				history.push('/user/home');
+			}
+		}
+	}, [userDetailLoading]);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();

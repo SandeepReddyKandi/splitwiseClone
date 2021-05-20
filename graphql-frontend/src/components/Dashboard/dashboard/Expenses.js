@@ -18,13 +18,12 @@ const Expenses = (props)=>{
         }
     });
 
-    const [userIndo, setUserIndo] = useState();
-    const [userExpenses, setUserExpenses] = useState();
+    const [userIndo, setUserInfo] = useState();
     const [allBalance, setBalance] = useState();
 
     useEffect(() => {
         UserBackendAPIService.getUserDetails().then(({data, success})=>{
-            setUserIndo(data);
+            setUserInfo(data);
         }).catch(e => {
             console.log(e.message);
         });

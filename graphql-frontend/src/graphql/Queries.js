@@ -18,3 +18,23 @@ export const GET_USERS = gql`
         }
     }
 `;
+
+
+export const GET_USER_DETAIL = gql`
+    query($userId: String!) {
+        getUserDetails (userId: $userId) {
+            success
+            message
+            data {
+                id
+                name
+                email
+                token
+                language
+                phone
+                timezone
+                imageURL
+            }
+        }
+    }
+`;

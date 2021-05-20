@@ -17,11 +17,14 @@ const initState = {
 const userReducer = (state = initState, action)=> {
   switch (action.type) {
     case 'ADD_USER_DATA' : {
+      debugger;
+      localStorage.setItem('token', JSON.stringify(action.payload.token));
+      localStorage.setItem('userId', JSON.stringify(action.payload.id));
       return {
         ...state,
         user: {
           ...action.payload,
-          id: action.payload._id,
+          id: action.payload.id,
         }
       }
     }

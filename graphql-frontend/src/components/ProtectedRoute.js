@@ -20,7 +20,6 @@ const ProtectedRoute = ({ userData, addUserData, history, children, ...rest}) =>
                     setUser(data);
                     addUserData(data);
                     setIsLoading(false);
-                    localStorage.setItem('token', JSON.stringify(data.token));
                 } else {
                     history.push('/login');
                 }
