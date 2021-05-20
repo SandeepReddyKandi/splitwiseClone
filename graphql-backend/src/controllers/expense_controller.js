@@ -30,15 +30,18 @@ export async function getBalanceByUser2Id(__, {userId, user2Id}) {
 
 export async function getAllExpenses(__, {userId}) {
   try {
+    console.log('USER ID IS', userId);
     const { getExpenses, payExpenses } = await ExpenseService.getAllExpensesForUserId(userId);
     const users = await UserService.getAllUsers();
     const allGroups = await GroupService.getAllGroups();
     const data = expensesDtl.getExpenseSummaryDto({ getExpenses, payExpenses, userId, users, allGroups });
+    console.log('DATA IS', data)
     return {
       success: true,
       data,
     };
   } catch (err) {
+    console.log('Error is ', err)
     return {
       success: false,
       message: `Unable to get all expenses. Err. ${JSON.stringify(err)}`

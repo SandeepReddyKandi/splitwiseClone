@@ -1,15 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import { useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import Recieve from './Recieve';
 import Give from './GivePayment';
 import Modal from './Modal';
 import '../dashboard.scss';
 import './Modal.css'
 import "materialize-css/dist/css/materialize.min.css";
-import ExpenseBackendAPIService from "../../../services/ExpenseBackendAPIService";
-import UserBackendAPIService from "../../../services/UserBackendAPIService";
+import {useLazyQuery} from "@apollo/client";
+import {GET_ALL_EXPENSES} from "../../../graphql/Queries";
 
-const Expenses = (props)=>{
+const Expenses = (props) => {
+    const [getAllExpenses, {loading: getAllExpensesLoading, data: allExpensesData}] = useLazyQuery(GET_ALL_EXPENSES);
+
     const {recieve, pay} = useSelector(state => {
         return {
             recieve: state.expenseState.recieve,
@@ -18,24 +20,26 @@ const Expenses = (props)=>{
         }
     });
 
-    const [userIndo, setUserInfo] = useState();
     const [allBalance, setBalance] = useState();
 
     useEffect(() => {
-        UserBackendAPIService.getUserDetails().then(({data, success})=>{
-            setUserInfo(data);
-        }).catch(e => {
-            console.log(e.message);
+        const userId = localStorage.getItem('userId') ? JSON.parse(localStorage.getItem('userId')) : null;
+
+        getAllExpenses({
+            variables: {
+                userId,
+            }
         });
     },[]);
 
-    useEffect(()=>{
-        ExpenseBackendAPIService.getAllExpenses().then(({data, success})=>{
-            if(success){
-                setBalance(data);
-            }
-        })
-    },[]);
+    useEffect(() => {
+       if (getAllExpensesLoading) {
+           if (allExpensesData && allExpensesData.data.getAllExpenses.success) {
+               setBalance(allExpensesData.data.getAllExpenses.data);
+           }
+       }
+    }, [getAllExpensesLoading]);
+
 
     return (
         <div className="container expenses row z-depth-2">

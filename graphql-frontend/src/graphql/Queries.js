@@ -38,3 +38,19 @@ export const GET_USER_DETAIL = gql`
         }
     }
 `;
+
+export const GET_ALL_EXPENSES = gql`
+    query($userId: String!) {
+        getAllExpenses(userId: $userId) {
+            success
+            message
+            data {
+                totalcost
+                pay
+                recieve
+                recieveExpenses
+                getExpenses
+            }
+        }
+    }
+`;

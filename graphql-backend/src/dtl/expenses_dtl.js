@@ -2,7 +2,10 @@ import * as _ from 'underscore';
 import { expenseEnums } from '../utils/enums';
 
 function getNameById(data, id) {
-  const value = data.find(entry => entry.id == id);
+  const value = data.find(entry => {
+    return entry.id == id || entry._id == id
+  });
+  console.log('VALUE IS', value, data, id);
   return value.name;
 }
 

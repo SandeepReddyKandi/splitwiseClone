@@ -12,15 +12,23 @@ const user = gql`
         settledAt: String!
         currency: String
     }
+#
+#    type AllExpenseData {
+#        byUser: String!
+#        toUser: String!
+#        groupId: String!
+#        amount: Float!
+#        description: String!
+#        settledAt: String!
+#        currency: String
+#    }
 
     type AllExpenseData {
-        byUser: String!
-        toUser: String!
-        groupId: String!
-        amount: Float!
-        description: String!
-        settledAt: String!
-        currency: String
+        totalcost: String
+        pay: String
+        recieve: String
+        recieveExpenses: [String]
+        getExpenses: [String]
     }
 
     type RecentExpenseData {
