@@ -88,7 +88,7 @@ const user = gql`
     type RecentExpenseResponse {
         success: Boolean,
         message: String,
-        data: RecentExpenseData
+        data: [RecentExpenseData]
     }
     
     type ExpenseListResponse {

@@ -58,6 +58,27 @@ export const CREATE_GROUP_EXPENSE = gql`
 
 `
 
+
+export const SETTLE_EXPENSE = gql`
+    mutation($userId: String, $user2Id: String) {
+        settleExpense(userId: $userId, user2Id: $user2Id) {
+            success
+            message
+            data {
+                id
+                byUser
+                toUser
+                groupId
+                amount
+                description
+                settledAt
+                currency
+            }
+        }
+    }
+
+`
+
 export const CREATE_GROUP = gql`
     mutation($userId: String, $data: CreateGroupInput) {
         createGroup(userId: $userId, data: $data) {
@@ -79,6 +100,24 @@ export const CREATE_GROUP = gql`
 export const ACCEPT_INVITE = gql`
     mutation($userId: String, $groupId: String) {
         acceptGroupInvite(userId: $userId, groupId: $groupId) {
+            success
+            message
+            data {
+                id
+                name
+                acceptedUsers
+                invitedUsers
+                currency
+                imageUrl
+            }
+        }
+    }
+`
+
+
+export const LEAVE_GROUP = gql`
+    mutation($userId: String, $groupId: String) {
+        leaveGroup(userId: $userId, groupId: $groupId) {
             success
             message
             data {

@@ -1,17 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {connect, useSelector} from 'react-redux';
+import {useLazyQuery} from "@apollo/client";
 import ExpenseList from './ExpenseList';
 import '../dashboard.scss';
-import ExpenseBackendAPIService from '../../../services/ExpenseBackendAPIService';
+import {GET_RECENT_ACTIVITIES} from "../../../graphql/Queries";
 
 const RecentActivityComponent = (props)=>{
     const [selectedPageSize, setSelectedPageSize] = useState(2);
     const [selectedPageNumber, setSelectedPageNumber] = useState(1);
+    const [getRecentActivities, {loading: recentLoading, data: recentData}] = useLazyQuery(GET_RECENT_ACTIVITIES);
     const {activities, token, userId} = useSelector(state => {
         return {
             activities: state.expenseState.recentActivities,
-            token : state.userState.token,
-            userId : state.userState.id
+            token : state.userState.user.token,
+            userId : state.userState.user.id
         }
     });
 
@@ -19,13 +21,22 @@ const RecentActivityComponent = (props)=>{
     const [paginatedResults, setPaginatedResults] = useState([]);
 
     useEffect(() => {
-        ExpenseBackendAPIService.getRecentActivity().then(({data, success})=>{
-            if (success) {
-                setRecentActivities(data);
-                setPaginatedResults(data.slice(0, selectedPageSize));
+        getRecentActivities({
+            variables: {
+                userId
             }
         })
     },[]);
+
+    useEffect(() => {
+        if (!recentLoading) {
+            if (recentData && recentData.getRecentExpenses.success) {
+                const data = [...recentData.getRecentExpenses.data];
+                setRecentActivities(data);
+                setPaginatedResults(data.slice(0, selectedPageSize));
+            }
+        }
+    }, [recentLoading]);
 
     const changePage = (pageNo) => {
         setSelectedPageNumber(pageNo);
@@ -94,13 +105,13 @@ const RecentActivityComponent = (props)=>{
 
 const mapDispatchToProps = (dispatch) =>{
     return {
-      addRecentActivities: (state)=>{
-        dispatch({
-          type: "ADD_ACTIVITIES",
-          payload: state
-        });
-      }
+        addRecentActivities: (state)=>{
+            dispatch({
+                type: "ADD_ACTIVITIES",
+                payload: state
+            });
+        }
     };
-  };
+};
 
 export default connect(null, mapDispatchToProps)(RecentActivityComponent);

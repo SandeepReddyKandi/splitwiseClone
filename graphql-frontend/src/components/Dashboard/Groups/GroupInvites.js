@@ -2,17 +2,17 @@ import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import '../dashboard.scss'
 import {toast} from "react-toastify";
-import GroupBackendAPIService from "../../../services/GroupBackendAPIService";
 import SearchComponent from "./SearchComponent";
 import {useLazyQuery, useMutation} from "@apollo/client";
 import {GET_ALL_GROUPS} from "../../../graphql/Queries";
-import {ACCEPT_INVITE} from "../../../graphql/Mutations";
+import {ACCEPT_INVITE, LEAVE_GROUP} from "../../../graphql/Mutations";
 
 const Invites = (props)=>{
     const [invitedGroups, setInvitedGroups] = useState(props.invitedGroups || []);
     const [acceptedGroups, setAcceptedGroups] = useState(props.acceptedGroups || []);
     const [getAllGroups, {loading: allGroupsLoading, data: allGroupsData}] = useLazyQuery(GET_ALL_GROUPS);
     const [acceptInvite, {loading: acceptInviteLoading, data: acceptInviteData}] = useMutation(ACCEPT_INVITE);
+    const [leaveGroupMutation, {loading: leaveGroupLoading, data: leaveGroupData}] = useMutation(LEAVE_GROUP)
     console.log('allGroupsData', allGroupsLoading, allGroupsData);
     useEffect(() => {
         const userId = localStorage.getItem('userId') ? JSON.parse(localStorage.getItem('userId')) : null;
@@ -67,8 +67,14 @@ const Invites = (props)=>{
     }
 
     const leaveGroup = (invite, isInvitedGroup)=>{
-        GroupBackendAPIService.leaveGroup(invite).then(({data, success})=>{
-            if(success){
+        const userId = localStorage.getItem('userId') ? JSON.parse(localStorage.getItem('userId')) : null;
+        leaveGroupMutation({
+            variables: {
+                userId,
+                groupId: invite.id,
+            }
+        }).then(({data})=>{
+            if(data.leaveGroup.success){
                 toast.info(`Successfully Left the group ${invite.name}!`);
                 if (isInvitedGroup) {
                     props.removeInvites(invite);
@@ -78,7 +84,7 @@ const Invites = (props)=>{
                     setAcceptedGroups(acceptedGroups.filter(group => group.id !== invite.id))
                 }
             } else {
-                toast.error(data.reason);
+                toast.error(data.leaveGroup.message);
             }
         })
     }

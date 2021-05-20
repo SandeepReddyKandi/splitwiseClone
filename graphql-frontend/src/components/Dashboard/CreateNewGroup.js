@@ -44,6 +44,7 @@ const CreateNewGroup = () => {
 	useEffect(() => {
 		if (!usersList.length) {
 			getAllUsers();
+			return
 		}
 
 		setState((prevState) => ({

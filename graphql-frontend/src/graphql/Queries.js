@@ -75,6 +75,27 @@ export const GET_ALL_EXPENSES = gql`
     }
 `;
 
+
+export const GET_RECENT_ACTIVITIES = gql`
+    query($userId: String!) {
+        getRecentExpenses(userId: $userId) {
+            success
+            message
+            data {
+                timestamp
+                byUserName
+                toUserName
+                type
+                groupName
+                description
+                amount
+                userId
+                currency
+            }
+        }
+    }
+`;
+
 export const GET_ALL_EXPENSES_FOR_GROUP = gql`
     query($groupId: String!) {
         getAllExpensesForGroup(groupId: $groupId) {
