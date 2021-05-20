@@ -52,7 +52,7 @@ export async function loginUser(_skip, {email, password}) {
     }
   } catch (err) {
     return {
-      success: true,
+      success: false,
       message: `User Login failed. Err: ${err}`,
     }
   }

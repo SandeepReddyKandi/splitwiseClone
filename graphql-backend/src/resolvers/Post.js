@@ -6,8 +6,8 @@ const PostResolver = {
     },
 
     Mutation: {
-        createPost: acceptGroupInvite,
-        deletePost: createGroup,
+        createPost: createPost,
+        deletePost: deletePost,
     }
 }
 

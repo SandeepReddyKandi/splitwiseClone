@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import UserBackendAPIService from "./services/UserBackendAPIService";
 import {connect} from "react-redux";
 import "./App.css";
+import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
 
 function App(props) {
     useEffect(() => {
@@ -34,29 +35,35 @@ function App(props) {
         }
     }
 
+    const client = new ApolloClient({
+        cache: new InMemoryCache(),
+        uri: process.env.REACT_APP_GRAPHQL_API_URI
+    })
+
     return (
         <BrowserRouter>
-            <div className="App">
-                <ToastContainer/>
-                <Route exact path="/" component={HomeComponent}/>
-                <Route path="/login" component={LoginComponent}/>
-                <Route path="/signup" component={SignUpComponent}/>
-                <Route exact path="/user" component={() => {
-                    return (
-                        <ProtectedRoute>
-                            <User />
-                        </ProtectedRoute>
-                    )
-                }}/>
-                <Route path="/user/home" component={() => {
-                    return (
-                        <ProtectedRoute>
-                            <Dashboard />
-                        </ProtectedRoute>
-                    )
-                }}/>
-                {/* <Route path="/user/home/new-group" component={CreateNewGroup}/> */}
-            </div>
+            <ApolloProvider client={client}>
+                <div className="App">
+                    <ToastContainer/>
+                    <Route exact path="/" component={HomeComponent}/>
+                    <Route path="/login" component={LoginComponent}/>
+                    <Route path="/signup" component={SignUpComponent}/>
+                    <Route exact path="/user" component={() => {
+                        return (
+                            <ProtectedRoute>
+                                <User />
+                            </ProtectedRoute>
+                        )
+                    }}/>
+                    <Route path="/user/home" component={() => {
+                        return (
+                            <ProtectedRoute>
+                                <Dashboard />
+                            </ProtectedRoute>
+                        )
+                    }}/>
+                </div>
+            </ApolloProvider>
         </BrowserRouter>
     );
 }

@@ -1,18 +1,14 @@
-import {ApolloServer, gql} from "apollo-server-express";
+import {ApolloServer} from "apollo-server-express";
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import rootTypeDef from './typedefs/index';
 import rootResolvers from './resolvers/index';
-import publishKafkaMessage from "./kafka/kafka-producer";
 import {DB_URL, DEFAULT_PORT} from "./config/config";
 import getLogger from "./utils/logger";
 
 const app = express();
-
-// call the `produce` function and log an error if it occurs
-publishKafkaMessage({key: 'Init', value: 'Backend is running!'})
 
 app.use(cors());
 
@@ -40,16 +36,11 @@ const connect = mongoose.createConnection(DB_URL, { useNewUrlParser: true, useUn
 
 let gfs;
 connect.once('open', () => {
-    // initialize stream
     gfs = new mongoose.mongo.GridFSBucket(connect.db, {
         bucketName: "uploads"
     });
 });
-//
-// app.use('/user/', userRouter);
-// app.use('/groups/', groupRouter);
-// app.use('/expenses/', expenseRouter);
-// app.use('/posts/', postRouter);
+
 app.get('/file/:filename', (req, res, next) => {
     gfs.find({ filename: req.params.filename }).toArray((err, files) => {
         console.log(files);
