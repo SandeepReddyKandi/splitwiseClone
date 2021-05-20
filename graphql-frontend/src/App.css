@@ -31,7 +31,7 @@ select.users-select {
     height: 164px;
 }
 
-circle-clipper .circle {
+.circle-clipper .circle {
     border-width: 10px;
     border-color: #32937f;
 }

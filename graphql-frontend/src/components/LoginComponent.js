@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Link, useHistory} from "react-router-dom";
 import "./login.css";
 import letter from "../letter.webp";
@@ -8,6 +8,7 @@ import NavigationBarComponent from "./NavigationBarComponent";
 import UserBackendAPIService from "../services/UserBackendAPIService";
 import {useMutation} from "@apollo/client";
 import {LOGIN_USER} from "../graphql/Mutations";
+import LoadingComponent from "./LoadingComponent";
 
 const LoginComponent = () => {
 	const [state, setState] = useState({
@@ -90,21 +91,7 @@ const LoginComponent = () => {
 				</div>
 			</div>
 			{
-				loading && <div className='loader-overlay'>
-					<div className="preloader-wrapper big active">
-						<div className="spinner-layer spinner-blue-only">
-							<div className="circle-clipper left">
-								<div className="circle"></div>
-							</div>
-							<div className="gap-patch">
-								<div className="circle"></div>
-							</div>
-							<div className="circle-clipper right">
-								<div className="circle"></div>
-							</div>
-						</div>
-					</div>
-				</div>
+				loading && <LoadingComponent/>
 			}
 		</div>
 	);

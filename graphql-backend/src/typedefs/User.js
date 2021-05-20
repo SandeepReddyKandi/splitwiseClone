@@ -30,8 +30,6 @@ const user = gql`
     type Response {
         success: Boolean,
         message: String,
-        reason: String,
-        error: String,
         data: User
     }
     

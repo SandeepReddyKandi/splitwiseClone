@@ -18,3 +18,23 @@ export const LOGIN_USER = gql`
         }
     }
 `;
+
+export const SIGNUP_USER = gql`
+    mutation($userBody: CreateUserInput!) {
+        signUpUser (userBody: $userBody) {
+            success
+            message
+            data {
+                id
+                name
+                email
+                token
+                language
+                phone
+                timezone
+                imageURL
+            }
+        }
+    }
+`;
+
