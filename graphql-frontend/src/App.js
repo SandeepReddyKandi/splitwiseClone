@@ -8,7 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Dashboard from './components/Dashboard/Dashboard';
 import User from './components/Dashboard/User/User';
 import ProtectedRoute from "./components/ProtectedRoute";
-import UserBackendAPIService from "./services/UserBackendAPIService";
 import {connect} from "react-redux";
 import "./App.css";
 import {useLazyQuery} from "@apollo/client";

@@ -21,6 +21,7 @@ export async function getAllGroups(__, { userId }) {
   try {
     const groups = await GroupService.getAllGroupsByUserId(userId);
     const data = groupsDtl.getAllGroupsDto(groups);
+    console.log('DATA IS ', data)
     return {
       success: true,
       data,
@@ -51,8 +52,8 @@ export async function acceptGroupInvite(__, { userId, groupId}) {
 }
 
 export async function createGroup(__, {userId, data}) {
-  try {
     const { name, invitedUsers, currency } = data;
+    try {
     const group = await GroupService.findGroupByName(name);
     if (group && !_.isEmpty(group)) {
       return {
@@ -61,12 +62,14 @@ export async function createGroup(__, {userId, data}) {
       }
     }
     const newGroup = await GroupService.createGroup({ userId, name, currency, invitedUsers });
+    console.log('new GgrouP IS', newGroup)
     const data = groupsDtl.getBasicGroupDetails(newGroup);
     return {
       success: true,
       data,
     }
   } catch (err) {
+    console.log('[GROUP CONTROLLER] ERROR IS', err)
     return {
       success: false,
       message: `Unable to create new group. Err. ${JSON.stringify(err)}`,

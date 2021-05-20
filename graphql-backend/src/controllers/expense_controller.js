@@ -35,7 +35,6 @@ export async function getAllExpenses(__, {userId}) {
     const users = await UserService.getAllUsers();
     const allGroups = await GroupService.getAllGroups();
     const data = expensesDtl.getExpenseSummaryDto({ getExpenses, payExpenses, userId, users, allGroups });
-    console.log('DATA IS', data)
     return {
       success: true,
       data,

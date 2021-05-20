@@ -2,21 +2,39 @@ import React, {useEffect} from 'react';
 import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux';
 import './dashboard.scss';
-import GroupBackendAPIService from "../../services/GroupBackendAPIService";
+import {useLazyQuery} from "@apollo/client";
+import {GET_ALL_GROUPS} from "../../graphql/Queries";
 
-const Sidebar = ()=>{
+const Sidebar = () => {
+    const [getAllGroups, {loading: allGroupsLoading, data: allGroupsData}] = useLazyQuery(GET_ALL_GROUPS);
+
     const dispatch = useDispatch();
-    const {acceptedGroups, invitedGroups} = useSelector(state => state.groupState)
+    const {acceptedGroups, invitedGroups, usersList} = useSelector(state => ({
+        acceptedGroups: state.groupState.acceptedGroups,
+        invitedGroups: state.groupState.invitedGroups,
+        usersList: state.userState.usersList,
+    }))
+
     useEffect(() => {
-        GroupBackendAPIService.getAllGroups().then(({data, success})=>{
-            if (success){
-                dispatch({
-                    type: 'ADD_GROUPS',
-                    payload: data
-                });
+        const userId = localStorage.getItem('userId') ? JSON.parse(localStorage.getItem('userId')) : null;
+        getAllGroups({
+            variables: {
+                userId,
             }
         });
     },[]);
+
+    useEffect(() => {
+       if (!allGroupsLoading) {
+           if (allGroupsData && allGroupsData.getAllGroups.success) {
+               dispatch({
+                   type: 'ADD_GROUPS',
+                   payload: allGroupsData.getAllGroups.data
+               });
+           }
+       }
+    }, [allGroupsLoading]);
+
 
     return(
         <div className="container sidebar">

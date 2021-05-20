@@ -38,3 +38,40 @@ export const SIGNUP_USER = gql`
     }
 `;
 
+export const CREATE_GROUP_EXPENSE = gql`
+    mutation($userId: String, $groupBody: CreateGroupExpenseInput) {
+        createGroupExpense(userId: $userId, groupBody: $groupBody) {
+            success
+            message
+            data {
+                id
+                byUser
+                toUser
+                groupId
+                amount
+                description
+                settledAt
+                currency
+            }
+        }
+    }
+
+`
+export const CREATE_GROUP = gql`
+    mutation($userId: String, $data: CreateGroupInput) {
+        createGroup(userId: $userId, data: $data) {
+            success
+            message
+            data {
+                id
+                name
+                acceptedUsers
+                invitedUsers
+                currency
+                imageUrl
+            }
+        }
+    }
+
+`
+

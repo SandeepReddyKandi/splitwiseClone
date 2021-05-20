@@ -39,6 +39,26 @@ export const GET_USER_DETAIL = gql`
     }
 `;
 
+export const GET_ALL_GROUPS = gql`
+    query($userId: String!) {
+        getAllGroups(userId: $userId) {
+            success
+            message
+            data {
+                acceptedGroups {
+                    id
+                    name
+                }
+                invitedGroups {
+                    id
+                    name
+                }
+            }
+        }
+    }
+`;
+
+
 export const GET_ALL_EXPENSES = gql`
     query($userId: String!) {
         getAllExpenses(userId: $userId) {
@@ -54,3 +74,5 @@ export const GET_ALL_EXPENSES = gql`
         }
     }
 `;
+
+

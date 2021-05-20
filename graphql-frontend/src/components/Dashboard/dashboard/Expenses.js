@@ -33,9 +33,9 @@ const Expenses = (props) => {
     },[]);
 
     useEffect(() => {
-       if (getAllExpensesLoading) {
-           if (allExpensesData && allExpensesData.data.getAllExpenses.success) {
-               setBalance(allExpensesData.data.getAllExpenses.data);
+       if (!getAllExpensesLoading) {
+           if (allExpensesData && allExpensesData.getAllExpenses.success) {
+               setBalance(allExpensesData.getAllExpenses.data);
            }
        }
     }, [getAllExpensesLoading]);

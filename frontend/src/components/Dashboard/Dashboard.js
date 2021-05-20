@@ -1,12 +1,10 @@
 import React from 'react';
-import { useSelector, connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Sidebar from './Sidebar';
 import Expenses from './dashboard/Expenses';
 import RecentActivity from './RecentActivity/RecentActivity';
-import { Link, Switch } from "react-router-dom";
-import { BrowserRouter, Router, Route, Redirect } from "react-router-dom";
+import {Link, Route, Switch} from "react-router-dom";
 import UserGroups from './Groups/UserGroup';
-import User from './User/User';
 import './dashboard.scss';
 import CreateNewGroup from './CreateNewGroup';
 import Invites from './Groups/GroupInvites';

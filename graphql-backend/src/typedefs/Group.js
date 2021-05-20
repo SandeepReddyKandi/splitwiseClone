@@ -21,7 +21,7 @@ const group = gql`
     }
 
     input CreateGroupInput {
-        name: String!
+        name: String
         invitedUsers: [String]
         currency: String
     }
@@ -38,22 +38,22 @@ const group = gql`
         data: [Group]
     }
 
-    type ALlGroupResponse {
+    type AllGroupResponse {
         success: Boolean!
         message: String
-        data: [AllGroupInfo]
+        data: AllGroupInfo
     }
 
     extend type Query {
         getGroupInfo: GroupResponse!
-        getAllGroups(groupId: String): ALlGroupResponse
+        getAllGroups(userId: String): AllGroupResponse
     }
 
     extend type Mutation {
         acceptGroupInvite(userId: String, groupId: String): GroupResponse
-        createGroup(userId: String, data: CreateGroupInput): Response
-        leaveGroup(userId: String, groupId: String): Response
-        updateGroup(name: String, groupId: String): Response
+        createGroup(userId: String, data: CreateGroupInput): GroupResponse
+        leaveGroup(userId: String, groupId: String): GroupResponse
+        updateGroup(name: String, groupId: String): GroupResponse
     }
 `
 
