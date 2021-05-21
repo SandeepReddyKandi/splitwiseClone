@@ -13,6 +13,7 @@ export const LOGIN_USER = gql`
                 language
                 phone
                 timezone
+                currency
                 imageURL
             }
         }
@@ -32,6 +33,27 @@ export const SIGNUP_USER = gql`
                 language
                 phone
                 timezone
+                currency
+                imageURL
+            }
+        }
+    }
+`;
+
+export const UPDATE_USER_PROFILE = gql`
+    mutation($userId: String!, $userDetails: UpdateUserInput ) {
+        updateDetails (userId: $userId, userDetails: $userDetails) {
+            success
+            message
+            data {
+                id
+                name
+                email
+                token
+                language
+                phone
+                timezone
+                currency
                 imageURL
             }
         }
@@ -55,9 +77,7 @@ export const CREATE_GROUP_EXPENSE = gql`
             }
         }
     }
-
 `
-
 
 export const SETTLE_EXPENSE = gql`
     mutation($userId: String, $user2Id: String) {
@@ -76,7 +96,6 @@ export const SETTLE_EXPENSE = gql`
             }
         }
     }
-
 `
 
 export const CREATE_GROUP = gql`

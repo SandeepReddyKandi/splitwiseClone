@@ -11,6 +11,7 @@ const user = gql`
         language: String
         phone: String
         timezone: String
+        currency: String
         imageURL: String
     }
 
@@ -24,7 +25,10 @@ const user = gql`
     input UpdateUserInput {
         name: String
         email: String
-        age: Int
+        phone: String
+        timezone: String
+        language: String
+        currency: String
     }
 
     type Response {

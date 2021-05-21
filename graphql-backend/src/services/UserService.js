@@ -20,8 +20,8 @@ class UserService {
     }
 
     static async updateUserDetailsById(userId, data) {
-        const { currency, phone, name, language, timezone, imageURL } = data;
-        const values = { currency, phone, name, language, timezone, imageURL };
+        const { currency, phone, name, language, timezone } = data;
+        const values = { currency, phone, name, language, timezone };
         const condition = { _id: userId };
         await User.updateOne(condition, values);
         const user = await User.findById(userId);

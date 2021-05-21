@@ -112,21 +112,16 @@ export async function signUpUser(_, { userBody }) {
 
 export async function updateUserDetails(_skip, {userId, userDetails}) {
   try {
-    getLogger().info('controllers', 'updateUserDetails', 'body', JSON.stringify(req.body));
     const { password, ...rest } = userDetails;
-    let payload;
-    if (req.file && req.file.filename) { // TODO
-    // if (false) {
+    let payload = {
+      ...rest,
+    };
+    if (password) {
+      const hashedPassword = createHashedPassword(password);
       payload = {
-        ...rest,
-        // password: hashedPassword,
-        imageURL:  req.file.filename,
-      };
-    } else {
-      payload = {
-        ...rest,
-        // password: hashedPassword,
-      };
+        ...payload,
+        password: hashedPassword
+      }
     }
     await UserService.updateUserDetailsById(userId, payload);
     const updatedDetails = await UserService.getUserById(userId);
@@ -135,6 +130,7 @@ export async function updateUserDetails(_skip, {userId, userDetails}) {
       data: updatedDetails
     };
   } catch (err) {
+    console.log('USER UPDATE', err)
     return {
       success: false,
       message: `Unable to update user details. Err. ${JSON.stringify(err)}`

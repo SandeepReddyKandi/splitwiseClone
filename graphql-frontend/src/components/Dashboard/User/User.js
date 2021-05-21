@@ -5,20 +5,25 @@ import './user.scss';
 import userIcon from './img/user_1.png';
 import UserBackendAPIService from "../../../services/UserBackendAPIService";
 import {toast} from "react-toastify";
+import {useMutation} from "@apollo/client";
+import {LOGIN_USER, UPDATE_USER_PROFILE} from "../../../graphql/Mutations";
 
 const PhoneRegex = new RegExp('^[(]?\\d{3}[)]?[(\\s)?.-]\\d{3}[\\s.-]\\d{4}$')
 
 const User = (props)=>{
-    const initUser = useSelector(state => {
+    const {initUser, userId} = useSelector(state => {
         const { user } = state.userState;
         return  {
-            name: user.name,
-            email: user.email,
-            phone: user.phone,
-            timezone: user.timezone,
-            language: user.language,
-            currency: user.currency,
-            imageURL: user.imageURL,
+            initUser: {
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                timezone: user.timezone,
+                language: user.language,
+                currency: user.currency,
+                imageURL: user.imageURL,
+            },
+            userId: user.id,
         }
     });
     const [user, setUser] = useState(initUser);
@@ -26,6 +31,7 @@ const User = (props)=>{
     const [localImageUrl, setLocalImageUrl] = useState();
 
     const fileUploadInputRef = useRef();
+    let [updateProfileMutation, {loading}] = useMutation(UPDATE_USER_PROFILE)
 
     const handleChange = (e) => {
         const [name, value] = [e.target.name, e.target.value];
@@ -45,6 +51,34 @@ const User = (props)=>{
         setLocalImageUrl(URL.createObjectURL(e.target.files[0]))
         setFileData(e.target.files[0]);
     }
+    //
+    // const handleUpdate = (e) => {
+    //     e.preventDefault();
+    //     const phoneNumberValid = PhoneRegex.test(user.phone);
+    //     if (!(user.name && user.email && user.phone && user.language )) {
+    //         toast.error('Please fill in all the fields!');
+    //         return;
+    //     } else if (!phoneNumberValid) {
+    //         toast.error('Please add correct phone number, for example: 111-222-3333!');
+    //         return;
+    //     }
+    //     const formData = new FormData();
+    //     Object.keys(user).map(userField => {
+    //         formData.set(userField, user[userField]);
+    //     });
+    //     if (fileData) {
+    //         formData.set('image',fileData);
+    //     }
+    //     UserBackendAPIService.updateUserDetails(formData).then(({data, success})=>{
+    //         if (success) {
+    //             props.updateUserData(data);
+    //             toast.success('User info updated successfully!')
+    //         } else {
+    //             toast.error('Could Not Update Your Info, Please Try Again!')
+    //         }
+    //     });
+    // }
+
 
     const handleUpdate = (e) => {
         e.preventDefault();
@@ -56,18 +90,23 @@ const User = (props)=>{
             toast.error('Please add correct phone number, for example: 111-222-3333!');
             return;
         }
-        const formData = new FormData();
-        Object.keys(user).map(userField => {
-            formData.set(userField, user[userField]);
-        });
-        if (fileData) {
-            formData.set('image',fileData);
-        }
-        UserBackendAPIService.updateUserDetails(formData).then(({data, success})=>{
-            if (success) {
-                props.updateUserData(data);
+        updateProfileMutation({
+            variables: {
+                userId,
+                userDetails: {
+                    name: user.name,
+                    email: user.email,
+                    phone: user.phone,
+                    timezone: user.timezone,
+                    language: user.language,
+                    currency: user.currency,
+                }
+            }
+        }).then(({data})=>{
+            if (data && data.updateDetails.success) {
+                props.updateUserData(data.updateDetails.data);
                 toast.success('User info updated successfully!')
-            } else {
+            } else if (data && !data.updateDetails.success) {
                 toast.error('Could Not Update Your Info, Please Try Again!')
             }
         });
@@ -145,7 +184,7 @@ const User = (props)=>{
                                         </div>
                                         <div className="row">
                                             <label htmlFor="currency">Currency :</label>
-                                            <select defaultValue="USD" name="currency" onChange={handleChange}>
+                                            <select defaultValue="USD" name="currency" onChange={handleChange} value={user.currency}>
                                                 <option>Select your default Currency</option>
                                                 <option value="USD">USD</option>
                                                 <option value="KWD">KWD</option>
@@ -162,6 +201,7 @@ const User = (props)=>{
                                                 defaultValue="New York, NY, USA EST (UTC -5)"
                                                 name="timezone"
                                                 onChange={handleChange}
+                                                value={user.timezone}
                                             >
                                                 <option>Select your timezone</option>
                                                 <option value="USD">New York, NY, USA EST (UTC -5)</option>
@@ -175,7 +215,7 @@ const User = (props)=>{
 
                                         <div className="row">
                                             <label htmlFor="languages">Language :</label>
-                                            <select defaultValue="English" name="language" onChange={handleChange}>
+                                            <select defaultValue="English" name="language" onChange={handleChange} value={user.language}>
                                                 <option>Select your default Language</option>
                                                 <option value="english">English</option>
                                                 <option value="arabic">Arabic</option>

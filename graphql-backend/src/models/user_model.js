@@ -9,6 +9,7 @@ const userSchema = new Schema({
     phone: { type: String },
     language: { type: String },
     timezone: { type: String },
+    currency: { type: String },
     imageURL: { type: String },
 }, { timestamps: true });
 

@@ -33,6 +33,7 @@ export const GET_USER_DETAIL = gql`
                 language
                 phone
                 timezone
+                currency
                 imageURL
             }
         }
