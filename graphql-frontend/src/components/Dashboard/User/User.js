@@ -74,7 +74,7 @@ const User = (props)=>{
     //             props.updateUserData(data);
     //             toast.success('User info updated successfully!')
     //         } else {
-    //             toast.error('Could Not Update Your Info, Please Try Again!')
+    //             toast    .error('Could Not Update Your Info, Please Try Again!')
     //         }
     //     });
     // }
@@ -204,12 +204,12 @@ const User = (props)=>{
                                                 value={user.timezone}
                                             >
                                                 <option>Select your timezone</option>
-                                                <option value="USD">New York, NY, USA EST (UTC -5)</option>
-                                                <option value="KWD">Kuwait City, Kuwait AST (UTC +3)</option>
-                                                <option value="BHD">Manama, Bahrain AST (UTC +3)</option>
-                                                <option value="GBP">London, United Kingdom GMT (UTC +0)</option>
-                                                <option value="EUR">Central European Time, CET (UTC +1) </option>
-                                                <option value="CAD">Toronto, Canada EST (UTC -5)</option>
+                                                <option value="New York, NY, USA EST (UTC -5)">New York, NY, USA EST (UTC -5)</option>
+                                                <option value="Kuwait City, Kuwait AST (UTC +3)">Kuwait City, Kuwait AST (UTC +3)</option>
+                                                <option value="Manama, Bahrain AST (UTC +3)">Manama, Bahrain AST (UTC +3)</option>
+                                                <option value="London, United Kingdom GMT (UTC +0)">London, United Kingdom GMT (UTC +0)</option>
+                                                <option value="Central European Time, CET (UTC +1)">Central European Time, CET (UTC +1) </option>
+                                                <option value="Toronto, Canada EST (UTC -5)">Toronto, Canada EST (UTC -5)</option>
                                             </select>
                                         </div>
 

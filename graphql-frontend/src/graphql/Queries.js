@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client';
 
+// ** QUERIES RELATED TO USER MODEL ** //
+
 export const GET_USERS = gql`
     {
         users {
@@ -40,7 +42,7 @@ export const GET_USER_DETAIL = gql`
     }
 `;
 
-/*  ALL THE EXPENSE RELATED QUERIES */
+// **  ALL THE EXPENSE RELATED QUERIES ** //
 
 export const GET_ALL_EXPENSES = gql`
     query($userId: String!) {
@@ -75,7 +77,6 @@ export const GET_ALL_EXPENSES = gql`
         }
     }
 `;
-
 
 export const GET_RECENT_ACTIVITIES = gql`
     query($userId: String!) {
@@ -117,8 +118,7 @@ export const GET_ALL_EXPENSES_FOR_GROUP = gql`
 `;
 
 
-/*  ALL THE GROUP RELATED QUERIES */
-
+// **  ALL THE GROUP RELATED QUERIES ** //
 
 export const GET_ALL_GROUPS = gql`
     query($userId: String!) {
@@ -138,8 +138,6 @@ export const GET_ALL_GROUPS = gql`
         }
     }
 `;
-
-
 export const GET_GROUP_INFO = gql`
     query($groupId: String!) {
         getGroupInfo(groupId: $groupId) {
@@ -170,5 +168,16 @@ export const GET_BALANCE_BETWEEN_USERS_FOR_GROUP = gql`
         }
     }
 `;
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -1,5 +1,4 @@
 import { gql } from 'apollo-server-express';
-import { loginUser } from '../controllers/user_controller';
 
 const user = gql`
     type Expense {
@@ -12,16 +11,7 @@ const user = gql`
         settledAt: String
         currency: String
     }
-#
-#    type AllExpenseData {
-#        byUser: String!
-#        toUser: String!
-#        groupId: String!
-#        amount: Float!
-#        description: String!
-#        settledAt: String!
-#        currency: String
-#    }
+
     type GET_OR_PAY_EXPENSES_GROUP {
         id: String
         amt: String
